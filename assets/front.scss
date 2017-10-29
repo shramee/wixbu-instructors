@@ -1,0 +1,92 @@
+/**
+ * Plugin front end styles
+ *
+ * @package Wixbu_Dash
+ * @version 1.0.0
+ */
+
+nav.llms-sd-nav {
+	border-bottom: 1px solid #ccc;
+	overflow: hidden;
+	width: 300px;
+	padding: 0;
+	float: left;
+	background: #ffffff;
+
+	* {
+		box-sizing: border-box;
+	}
+
+	.llms-sep {
+		display: none;
+	}
+
+	ul li.llms-sd-item {
+		&, a {
+			display: block;
+			width: 100%;
+		}
+		a {
+			color: #444 !important;
+			display: block;
+			padding: 8px 20px;
+			text-decoration: none;
+			border-top: 1px solid #aaa;
+			border-radius: 0;
+		}
+	}
+}
+
+.llms-sd-title {
+	display: none;
+}
+
+.wixbu-dash-content-wrap {
+	padding: 50px 35px;
+	background: #fff;
+	float: right;
+	width: calc( 100% - 320px );
+	&, * {
+		box-sizing: border-box;
+	}
+	a.delete-account {
+		color: #bb0000;
+		padding-top: 34px;
+		display: block;
+		text-align: right;
+	}
+}
+
+.llms-form-field {
+	padding: 5px 16px;
+	box-sizing: border-box;
+	color: #555;
+	select {
+		-webkit-appearance: none;
+	}
+}
+
+
+body {
+	input[type="text"], input[type="email"], input[type="url"], input[type="password"], input[type="search"],
+	.llms-button-action, .llms-button-danger, .llms-button-primary, .llms-button-secondary,
+	input[type="tel"], input[type="number"], textarea, select {
+		border: 2px solid;
+		font: inherit;
+		color: inherit;
+		border-radius: 7px;
+		margin: 16px 0 20px;
+		width: 100%;
+		display: block;
+		padding: 11px 16px;
+	}
+	.llms-button-action, .llms-button-danger, .llms-button-primary, .llms-button-secondary {
+		&:hover {
+			color: inherit;
+		}
+	}
+}
+
+.llms-form-heading {
+	padding: 0 25px 10px;
+}

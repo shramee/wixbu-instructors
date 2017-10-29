@@ -1,6 +1,69 @@
 /**
  * Plugin front end styles
  *
- * @package My_Plugin
+ * @package Wixbu_Dash
  * @version 1.0.0
  */
+nav.llms-sd-nav {
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+  width: 300px;
+  padding: 0;
+  float: left;
+  background: #ffffff; }
+  nav.llms-sd-nav * {
+    box-sizing: border-box; }
+  nav.llms-sd-nav .llms-sep {
+    display: none; }
+  nav.llms-sd-nav ul li.llms-sd-item, nav.llms-sd-nav ul li.llms-sd-item a {
+    display: block;
+    width: 100%; }
+  nav.llms-sd-nav ul li.llms-sd-item a {
+    color: #444 !important;
+    display: block;
+    padding: 8px 20px;
+    text-decoration: none;
+    border-top: 1px solid #aaa;
+    border-radius: 0; }
+
+.llms-sd-title {
+  display: none; }
+
+.wixbu-dash-content-wrap {
+  padding: 50px 35px;
+  background: #fff;
+  float: right;
+  width: calc( 100% - 320px ); }
+  .wixbu-dash-content-wrap, .wixbu-dash-content-wrap * {
+    box-sizing: border-box; }
+  .wixbu-dash-content-wrap a.delete-account {
+    color: #bb0000;
+    padding-top: 34px;
+    display: block;
+    text-align: right; }
+
+.llms-form-field {
+  padding: 5px 16px;
+  box-sizing: border-box;
+  color: #555; }
+  .llms-form-field select {
+    -webkit-appearance: none; }
+
+body input[type="text"], body input[type="email"], body input[type="url"], body input[type="password"], body input[type="search"],
+body .llms-button-action, body .llms-button-danger, body .llms-button-primary, body .llms-button-secondary,
+body input[type="tel"], body input[type="number"], body textarea, body select {
+  border: 2px solid;
+  font: inherit;
+  color: inherit;
+  border-radius: 7px;
+  margin: 16px 0 20px;
+  width: 100%;
+  display: block;
+  padding: 11px 16px; }
+body .llms-button-action:hover, body .llms-button-danger:hover, body .llms-button-primary:hover, body .llms-button-secondary:hover {
+  color: inherit; }
+
+.llms-form-heading {
+  padding: 0 25px 10px; }
+
+/*# sourceMappingURL=front.css.map */
