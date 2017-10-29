@@ -1,10 +1,10 @@
 <?php
 /**
- * My Plugin Admin class
+ * Wixbu dashboard Admin class
  */
-class My_Plugin_Admin {
+class Wixbu_Dash_Admin {
 
-	/** @var My_Plugin_Admin Instance */
+	/** @var Wixbu_Dash_Admin Instance */
 	private static $_instance = null;
 
 	/* @var string $token Plugin token */
@@ -20,9 +20,9 @@ class My_Plugin_Admin {
 	public $version;
 
 	/**
-	 * Main My Plugin Instance
+	 * Main Wixbu dashboard Instance
 	 * Ensures only one instance of Storefront_Extension_Boilerplate is loaded or can be loaded.
-	 * @return My_Plugin_Admin instance
+	 * @return Wixbu_Dash_Admin instance
 	 * @since 	1.0.0
 	 */
 	public static function instance() {
@@ -38,21 +38,26 @@ class My_Plugin_Admin {
 	 * @since 	1.0.0
 	 */
 	private function __construct() {
-		$this->token   =   My_Plugin::$token;
-		$this->url     =   My_Plugin::$url;
-		$this->path    =   My_Plugin::$path;
-		$this->version =   My_Plugin::$version;
+		$this->token   =   Wixbu_Dash::$token;
+		$this->url     =   Wixbu_Dash::$url;
+		$this->path    =   Wixbu_Dash::$path;
+		$this->version =   Wixbu_Dash::$version;
 	} // End __construct()
 
 	/**
-	 * Adds front end stylesheet and js
-	 * @action wp_enqueue_scripts
+	 * Delete user account AJAX handler
+	 * @action wp_ajax_wixbu_delete_user
 	 */
-	public function enqueue() {
-		$token = $this->token;
-		$url = $this->url;
+	public function wp_ajax_wixbu_delete_user() {
+		// Verify that the user intended to take this action.
+		if ( ! wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ), 'wixbu-delete-user' ) ) {
+			return;
+		}
 
-		wp_enqueue_style( $token . '-css', $url . '/assets/admin.css' );
-		wp_enqueue_script( $token . '-js', $url . '/assets/admin.js', array( 'jquery' ) );
+		require_once(ABSPATH.'wp-admin/includes/user.php' );
+		$current_user = wp_get_current_user();
+
+		//wp_delete_user( $current_user->ID );
+
 	}
 }
