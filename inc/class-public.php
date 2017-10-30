@@ -134,8 +134,8 @@ class Wixbu_Dash_Public{
 		$ajax_url = 'admin-ajax.php?action=wixbu_delete_user&nonce=' . wp_create_nonce( 'wixbu-delete-user' );
 		?>
 		<div class="llms-form-field type-submit llms-cols-3" style="float: right;">
-			<a class="delete-account" href="<?php echo admin_url( $ajax_url ) ?>">
-				<?php echo strpos( get_locale(), 'ES' ) !== false ? 'Editar Cuenta' : __( 'Close account' ); ?></a>
+			<a class="delete-account" href="<?php echo admin_url( $ajax_url ) ?>" onclick="return 'CLOSE' == prompt( '<?php $this->e_en_es( __( 'Write the word \\\'CLOSE\\\' (all uppercase) to confirm.' ), 'Escribe la palabra \\\'CLOSE\\\' (todo en mayúsculas).' ); ?>' )">
+				<?php $this->e_en_es( __( 'Close account' ), 'Cerrar Cuenta' ); ?></a>
 		</div>
 		<?php
 	}
@@ -178,7 +178,7 @@ class Wixbu_Dash_Public{
 		$tabs['membership'] = [
 			'content' => [ $this, 'panel_membership', ],
 			'endpoint' => 'membership',
-			'title' => __( 'Membership', 'lifterlms' ),
+			'title' => $this->__en_es( __( 'Membership' ), 'Membresía' ),
 		];
 
 		// Mis Cursos
@@ -196,15 +196,48 @@ class Wixbu_Dash_Public{
 		return $tabs;
 	}
 
-	public function panel_edit_account() {
-		echo '<h1>panel_edit_account</h1>';
-	}
-
-	public function panel_edit_address() {
-		echo '<h1>panel_edit_address</h1>';
-	}
-
 	public function panel_membership() {
-		echo '<h1>panel_membership</h1>';
+		$student = llms_get_student();
+		$student_memberships = $student->get_membership_levels();
+		$membership = '';
+		$mem_id = 0;
+		$mem_order = 0;
+		if ( $student_memberships ) {
+			$mem_id = end( $student_memberships );
+			$membership = new LLMS_Membership( $mem_id );
+			$membership = $membership->title;
+//			var_dump( $mem_id );
+			$orders = $student->get_orders();
+			foreach( $orders['orders'] as $order ) {
+//				var_dump( "$order->id => $order->product_id" );
+				if( $order->product_id == $mem_id ) {
+					$mem_order = $order->id;
+				}
+			}
+
+		}
+		?>
+		<div class="llms-form-field type-text llms-cols-8">
+			<label><?php $this->e_en_es( __( 'Membership' ), 'Membresía' ) ?></label>
+			<input class="llms-field-input" placeholder="Street Address" type="text" value="<?php echo $membership ?>" disabled="disabled">
+		</div>
+		<div class="llms-form-field type-text llms-cols-4 llms-cols-last">
+			<label>&nbsp;</label>
+		<a class="llms-button-action" href="<?php echo home_url( "panel-de-control/orders/$mem_order#llms_cancel_subscription" ) ?>">
+			<?php $this->e_en_es( __( 'CANCEL' ), 'CANCELAR' ) ?></a>
+		<a class="llms-button-action" href="<?php echo get_permalink( get_page_by_path( 'membresia' ) ) ?>">
+			<?php $this->e_en_es( __( 'CHANGE' ), 'CAMBIAR' ) ?></a>
+		<a class="llms-button-action" href="<?php echo home_url( "panel-de-control/orders/$mem_order" ) ?>">
+			<?php $this->e_en_es( __( 'PAYMENT INFO' ), 'INF. DE PAGO' ) ?></a>
+
+		<?php
+	}
+
+	protected function e_en_es( $en, $es ) {
+		echo strpos( get_locale(), 'ES' ) !== false ? $es : $en;
+	}
+
+	protected function __en_es( $en, $es ) {
+		return strpos( get_locale(), 'ES' ) !== false ? $es : $en;
 	}
 }
