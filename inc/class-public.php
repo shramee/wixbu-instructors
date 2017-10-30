@@ -240,6 +240,12 @@ class Wixbu_Dash_Public{
 				<?php $this->e_en_es( __( 'PAYMENT INFO' ), 'INF. DE PAGO' ) ?></a>
 
 			<?php
+		} else {
+			?>
+						<a class="llms-button-action" href="<?php echo get_permalink( get_page_by_path( 'membresia' ) ) ?>">
+				<?php $this->e_en_es( __( 'SUBSCRIBE' ), 'SUSCRIBIR' ) ?></a>
+
+			<?php
 		}
 	}
 
