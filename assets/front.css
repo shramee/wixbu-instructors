@@ -44,6 +44,8 @@ nav.llms-sd-nav {
     padding-top: 34px;
     display: block;
     text-align: right; }
+  .wixbu-dash-content-wrap a.llms-button-action, .wixbu-dash-content-wrap a.llms-button-action:visited {
+    color: inherit; }
 
 .llms-form-field {
   padding: 5px 16px;
@@ -64,7 +66,8 @@ nav.llms-sd-nav {
     display: block;
     padding: 7px 11px; }
   .llms-form-field .llms-button-action, .llms-form-field .llms-button-danger, .llms-form-field .llms-button-primary, .llms-form-field .llms-button-secondary {
-    text-align: center; }
+    text-align: center;
+    text-transform: uppercase; }
     .llms-form-field .llms-button-action:hover, .llms-form-field .llms-button-danger:hover, .llms-form-field .llms-button-primary:hover, .llms-form-field .llms-button-secondary:hover {
       color: inherit; }
 

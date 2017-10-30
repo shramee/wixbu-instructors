@@ -59,6 +59,11 @@ nav.llms-sd-nav {
 		display: block;
 		text-align: right;
 	}
+	a.llms-button-action {
+		&, &:visited {
+			color: inherit;
+		}
+	}
 }
 
 .llms-form-field {
@@ -84,6 +89,7 @@ nav.llms-sd-nav {
 	}
 	.llms-button-action, .llms-button-danger, .llms-button-primary, .llms-button-secondary {
 		text-align: center;
+		text-transform: uppercase;
 		&:hover {
 			color: inherit;
 		}
