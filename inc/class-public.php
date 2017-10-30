@@ -223,8 +223,14 @@ class Wixbu_Dash_Public{
 		</div>
 		<div class="llms-form-field type-text llms-cols-4 llms-cols-last">
 			<label>&nbsp;</label>
-		<a class="llms-button-action" href="<?php echo home_url( "panel-de-control/orders/$mem_order#llms_cancel_subscription" ) ?>">
-			<?php $this->e_en_es( __( 'CANCEL' ), 'CANCELAR' ) ?></a>
+
+		<form action="" id="llms-cancel-subscription-form" method="POST">
+			<button class="llms-field-button llms-button-secondary" id="llms_cancel_subscription" type="submit" name="llms_cancel_subscription"><?php $this->e_en_es( __( 'CANCEL' ), 'CANCELAR' ) ?></button>
+			<?php wp_nonce_field( 'llms_cancel_subscription', '_cancel_sub_nonce' ); ?>
+			<input name="order_id" type="hidden" value="<?php echo $mem_order; ?>">
+		</form>
+
+
 		<a class="llms-button-action" href="<?php echo get_permalink( get_page_by_path( 'membresia' ) ) ?>">
 			<?php $this->e_en_es( __( 'CHANGE' ), 'CAMBIAR' ) ?></a>
 		<a class="llms-button-action" href="<?php echo home_url( "panel-de-control/orders/$mem_order" ) ?>">
