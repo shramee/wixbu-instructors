@@ -135,7 +135,7 @@ class Wixbu_Dash_Public{
 		?>
 		<div class="llms-form-field type-submit llms-cols-3" style="float: right;">
 			<a class="delete-account" href="<?php echo admin_url( $ajax_url ) ?>" onclick="return 'CLOSE' == prompt( '<?php $this->e_en_es( __( 'Write the word \\\'CLOSE\\\' (all uppercase) to confirm.' ), 'Escribe la palabra \\\'CLOSE\\\' (todo en mayúsculas).' ); ?>' )">
-				<?php $this->e_en_es( __( 'Close account' ), 'Cerrar Cuenta' ); ?></a>
+				<?php $this->e_en_es( __( 'Delete account' ), 'Eliminar Cuenta' ); ?></a>
 		</div>
 		<?php
 	}
@@ -219,24 +219,28 @@ class Wixbu_Dash_Public{
 		?>
 		<div class="llms-form-field type-text llms-cols-8">
 			<label><?php $this->e_en_es( __( 'Membership' ), 'Membresía' ) ?></label>
-			<input class="llms-field-input" placeholder="Street Address" type="text" value="<?php echo $membership ?>" disabled="disabled">
+			<input class="llms-field-input" placeholder="<?php $this->e_en_es( __( 'No active membership.' ), 'No membresía activa.' ) ?>" type="text" value="<?php echo $membership ?>" disabled="disabled">
 		</div>
 		<div class="llms-form-field type-text llms-cols-4 llms-cols-last">
 			<label>&nbsp;</label>
 
-		<form action="" id="llms-cancel-subscription-form" method="POST">
-			<button class="llms-field-button llms-button-secondary" id="llms_cancel_subscription" type="submit" name="llms_cancel_subscription"><?php $this->e_en_es( __( 'CANCEL' ), 'CANCELAR' ) ?></button>
-			<?php wp_nonce_field( 'llms_cancel_subscription', '_cancel_sub_nonce' ); ?>
-			<input name="order_id" type="hidden" value="<?php echo $mem_order; ?>">
-		</form>
-
-
-		<a class="llms-button-action" href="<?php echo get_permalink( get_page_by_path( 'membresia' ) ) ?>">
-			<?php $this->e_en_es( __( 'CHANGE' ), 'CAMBIAR' ) ?></a>
-		<a class="llms-button-action" href="<?php echo home_url( "panel-de-control/orders/$mem_order" ) ?>">
-			<?php $this->e_en_es( __( 'PAYMENT INFO' ), 'INF. DE PAGO' ) ?></a>
-
 		<?php
+		if ( $membership ) {
+			?>
+			<form action="" id="llms-cancel-subscription-form" method="POST" onsubmit="return confirm( '<?php $this->e_en_es( __( 'Are you sure you want to cancel subscription?' ), '¿Estás seguro de que quieres cancelar tu suscripción?' ); ?>' )">
+				<button class="llms-field-button llms-button-secondary" id="llms_cancel_subscription" type="submit" name="llms_cancel_subscription"><?php $this->e_en_es( __( 'CANCEL' ), 'Eliminar' ) ?></button>
+				<?php wp_nonce_field( 'llms_cancel_subscription', '_cancel_sub_nonce' ); ?>
+				<input name="order_id" type="hidden" value="<?php echo $mem_order; ?>">
+			</form>
+
+
+			<a class="llms-button-action" href="<?php echo get_permalink( get_page_by_path( 'membresia' ) ) ?>">
+				<?php $this->e_en_es( __( 'CHANGE' ), 'CAMBIAR' ) ?></a>
+			<a class="llms-button-action" href="<?php echo home_url( "panel-de-control/orders/$mem_order" ) ?>">
+				<?php $this->e_en_es( __( 'PAYMENT INFO' ), 'INF. DE PAGO' ) ?></a>
+
+			<?php
+		}
 	}
 
 	protected function e_en_es( $en, $es ) {

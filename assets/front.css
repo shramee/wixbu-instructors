@@ -29,6 +29,7 @@ nav.llms-sd-nav {
   nav.llms-sd-nav ul li.llms-sd-item.current a {
     background: #eee; }
 
+.llms-sd-section-title,
 .llms-sd-title {
   display: none; }
 
