@@ -57,7 +57,20 @@ class Wixbu_Dash_Admin {
 		require_once(ABSPATH.'wp-admin/includes/user.php' );
 		$current_user = wp_get_current_user();
 
-		//wp_delete_user( $current_user->ID );
+		wp_delete_user( $current_user->ID );
+?>
+		<html>
+		<body>
+		<script>
+			alert( '<?php
+				echo strpos( get_locale(), 'ES' ) !== false ? 'Cuenta cerrada.' : __( 'Account deleted.' );
+		?>' );
+			window.location.href = "<?php echo home_url() ?>";
+		</script>
+		</body>
+		</html>
+		<?php
 
+		die();
 	}
 }
