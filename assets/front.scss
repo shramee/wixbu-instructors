@@ -12,6 +12,7 @@ nav.llms-sd-nav {
 	padding: 0;
 	float: left;
 	background: #ffffff;
+	border-bottom: 1px solid #aaa;
 
 	* {
 		box-sizing: border-box;
@@ -33,6 +34,9 @@ nav.llms-sd-nav {
 			text-decoration: none;
 			border-top: 1px solid #aaa;
 			border-radius: 0;
+		}
+		&.current a {
+			background: #eee;
 		}
 	}
 }
@@ -64,23 +68,22 @@ nav.llms-sd-nav {
 	select {
 		-webkit-appearance: none;
 	}
-}
 
-
-body {
 	input[type="text"], input[type="email"], input[type="url"], input[type="password"], input[type="search"],
 	.llms-button-action, .llms-button-danger, .llms-button-primary, .llms-button-secondary,
 	input[type="tel"], input[type="number"], textarea, select {
 		border: 2px solid;
 		font: inherit;
+		background: #ffffff;
 		color: inherit;
 		border-radius: 7px;
 		margin: 16px 0 20px;
 		width: 100%;
 		display: block;
-		padding: 11px 16px;
+		padding: 7px 11px;
 	}
 	.llms-button-action, .llms-button-danger, .llms-button-primary, .llms-button-secondary {
+		text-align: center;
 		&:hover {
 			color: inherit;
 		}
