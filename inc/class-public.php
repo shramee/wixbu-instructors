@@ -131,6 +131,7 @@ class Wixbu_Dash_Public{
 	 * @action lifterlms_before_update_button
 	 */
 	public function wixbu_delete_account_button() {
+		/*
 		$ajax_url = 'admin-ajax.php?action=wixbu_delete_user&nonce=' . wp_create_nonce( 'wixbu-delete-user' );
 		?>
 		<div class="llms-form-field type-submit llms-cols-3" style="float: right;">
@@ -138,6 +139,7 @@ class Wixbu_Dash_Public{
 				<?php $this->e_en_es( __( 'Delete account' ), 'Eliminar Cuenta' ); ?></a>
 		</div>
 		<?php
+		*/
 	}
 
 	public function lifterlms_update_account_redirect( $link ) {
