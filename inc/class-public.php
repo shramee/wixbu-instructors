@@ -158,42 +158,43 @@ class Wixbu_Dash_Public{
 	public function llms_get_student_dashboard_tabs( $tbs ) {
 		$tabs = [];
 
-		// Editar Cuenta
-		$tabs['edit-account'] = $tbs['edit-account'];
-//		$tabs['edit-account']['content'] = [ $this, 'panel_edit_account', ];
+//		var_dump( array_keys($tbs) );
 
-		// Editar Dirección
+		//My Courses
+		$tabs['view-courses'] = $tbs['view-courses'];
+
+		//Notifications
+		$tabs['notifications'] = $tbs['notifications'];
+
+		//My achievements
+		$tabs['view-achievements'] = $tbs['view-achievements'];
+
+		//Desk
+		$tabs['dashboard'] = $tbs['dashboard'];
+
+		//Edit Account
+		$tabs['edit-account'] = $tbs['edit-account'];
+
+		//Address
 		$tabs['edit-address'] = [
 			'content' => function() {
-			echo '<div class="llms-personal-form edit-address">';
-
-				LLMS_Student_Dashboard::output_edit_account_content();
-
-			echo '</div>';
-
+				echo '<div class="llms-personal-form edit-address">';
+					LLMS_Student_Dashboard::output_edit_account_content();
+				echo '</div>';
 			},
 			'endpoint' => 'edit-address',
 			'title' => __( 'Edit' ) . ' ' . __( 'Address', 'lifterlms' ),
 		];
 
-		// Membresía
+		//Membership
 		$tabs['membership'] = [
 			'content' => [ $this, 'panel_membership', ],
 			'endpoint' => 'membership',
 			'title' => $this->__en_es( __( 'Membership' ), 'Membresía' ),
 		];
 
-		// Mis Cursos
-		$tabs['view-courses'] = $tbs['view-courses'];
-
-		// Historial de Facturación
+		//Orders history
 		$tabs['orders'] = $tbs['orders'];
-
-		// Notificaciones
-		$tabs['notifications'] = $tbs['notifications'];
-
-		// Mis Logros
-		$tabs['view-achievements'] = $tbs['view-achievements'];
 
 		return $tabs;
 	}

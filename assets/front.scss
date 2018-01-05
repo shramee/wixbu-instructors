@@ -101,16 +101,17 @@ nav.llms-sd-nav {
 	padding: 0 25px 10px;
 }
 
-.llms-my-courses .llms-loop-link .llms-loop-item-footer {
-	display: none;
-}
-
-.llms-loop-list.cols-3 .llms-loop-item {
-	width: 100%;
+.llms-my-courses {
+	.llms-loop-link .llms-loop-item-footer {
+		display: none;
+	}
+	.llms-loop-list.cols-3 .llms-loop-item {
+		width: 100%;
+	}
 }
 
 @media (min-width: 850px){
-	.llms-loop-list.cols-3 .llms-loop-item {
+	.llms-my-courses .llms-loop-list.cols-3 .llms-loop-item {
 		width: 50%;
 	}
 }
