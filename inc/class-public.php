@@ -62,7 +62,7 @@ class Wixbu_Dash_Public{
 	 * @return string Default tabs
 	 */
 	public function llms_student_dashboard_default_tab( $tab ) {
-		return 'view-courses';
+		return 'edit-account';
 	}
 
 
@@ -159,13 +159,13 @@ class Wixbu_Dash_Public{
 		$tabs = [];
 
 		//My Courses
-		$tabs['view-courses'] = $tbs['view-courses'];
+//		$tabs['view-courses'] = $tbs['view-courses'];
 
 		//Notifications
-		$tabs['notifications'] = $tbs['notifications'];
+//		$tabs['notifications'] = $tbs['notifications'];
 
 		//My achievements
-		$tabs['view-achievements'] = $tbs['view-achievements'];
+//		$tabs['view-achievements'] = $tbs['view-achievements'];
 
 		//Edit Account
 		$tabs['edit-account'] = $tbs['edit-account'];

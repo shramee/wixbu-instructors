@@ -47,7 +47,7 @@ nav.llms-sd-nav {
 }
 
 .wixbu-dash-content-wrap {
-	padding: 50px 35px;
+	padding: 16px 25px 7px;
 	background: #fff;
 	float: right;
 	width: calc( 100% - 320px );
@@ -65,6 +65,10 @@ nav.llms-sd-nav {
 			color: inherit;
 		}
 	}
+}
+
+.wixbu-dash-content-wrap form {
+	margin: 0 -16px;
 }
 
 .llms-form-field {
