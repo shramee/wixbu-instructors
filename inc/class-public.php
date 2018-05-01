@@ -63,7 +63,7 @@ class Wixbu_Instructors_Dash_Public{
 	 */
 	public function llms_get_student_dashboard_tabs( $tbs ) {
 
-		if ( ! in_array( 'instructor', wp_get_current_user()->roles ) ) {
+		if ( ! wp_get_current_user()->has_cap( 'create_courses' ) ) {
 			return $tbs;
 		}
 
@@ -83,18 +83,38 @@ class Wixbu_Instructors_Dash_Public{
 			'title' => __( 'Edit' ) . ' ' . __( 'Address', 'lifterlms' ),
 		];
 
+		$tabs['earnings-report'] = [
+			'content' => [ $this, 'earnings_report' ],
+			'endpoint' => 'earnings-report',
+			'title' => $this->_en_es( __( 'Earnings report', 'wixbu_instructors-dashboard' ), 'Informe de ganancias' ),
+		];
+
+		$tabs['payment-gateway'] = [
+			'content' => [ $this, 'payment_gateway' ],
+			'endpoint' => 'payment-gateway',
+			'title' => $this->_en_es( __( 'Payment gateway', 'wixbu_instructors-dashboard' ), 'Cuenta de pago' ),
+		];
+
 		return $tabs;
+	}
+
+	public function payment_gateway() {
+		?>
+		Woo! payment_gateway
+		<?php
+	}
+
+	public function earnings_report() {
+		?>
+		Woo!
+		<?php
 	}
 
 	protected function e_en_es( $en, $es ) {
 		echo strpos( get_locale(), 'ES' ) !== false ? $es : $en;
 	}
 
-	protected function __en_es( $en, $es ) {
+	protected function _en_es( $en, $es ) {
 		return strpos( get_locale(), 'ES' ) !== false ? $es : $en;
 	}
 }
-
-?>
-
-
