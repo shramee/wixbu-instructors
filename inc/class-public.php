@@ -51,8 +51,8 @@ class Wixbu_Instructors_Public{
 		$token = $this->token;
 		$url = $this->url;
 
-		wp_enqueue_style( $token . '-css', $url . '/assets/front.css' );
-		wp_enqueue_script( $token . '-js', $url . '/assets/front.js', array( 'jquery' ) );
+		wp_register_style( $token . '-css', $url . '/assets/front.css' );
+		wp_register_script( $token . '-js', $url . '/assets/front.js', array( 'jquery' ) );
 	}
 
 	/**
@@ -99,15 +99,11 @@ class Wixbu_Instructors_Public{
 	}
 
 	public function payment_gateway() {
-		?>
-		Woo! payment_gateway
-		<?php
+		require 'tpl/payment_gateway.php';
 	}
 
 	public function earnings_report() {
-		?>
-		Woo!
-		<?php
+		require 'tpl/earnings_report.php';
 	}
 
 	protected function e_en_es( $en, $es ) {

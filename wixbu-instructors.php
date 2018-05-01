@@ -110,9 +110,9 @@ class Wixbu_Instructors{
 
 	public function wixbu_dash_required_notice() {
 		$class = 'notice notice-error';
-		$message = sprintf( __( 'Oops, Wixbu instructors plugin is required. %s Download %s', WXBIN ), '<a href="https://github.com/shramee/wixbu-dashboard">', '</a>' );
+		$message = sprintf( __( 'Oops, Wixbu instructors plugin is required. %s Download %s', WXBIN ), '<a target="_blank" href="https://github.com/shramee/wixbu-dashboard">', '</a>' );
 
-		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), $message );
 	}
 }
 
