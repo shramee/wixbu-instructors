@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Wixbu instructor's dashboard
+Plugin Name: Wixbu instructors and payments
 Plugin URI: http://shramee.me/
-Description: Sets instructors dashboard for Wixbu
+Description: Handles instructors dashboard and payments
 Author: Shramee
 Version: 1.0.0
 Author URI: http://shramee.me/
@@ -14,17 +14,14 @@ require 'inc/class-admin.php';
 /** Plugin public class */
 require 'inc/class-public.php';
 
-/**
- * Wixbu dashboard main class
- * @static string $token Plugin token
- * @static string $file Plugin __FILE__
- * @static string $url Plugin root dir url
- * @static string $path Plugin root dir path
- * @static string $version Plugin version
- */
-class Wixbu_Instructors_Dash{
+define( 'WXBIN', 'wixbu-instructors' );
 
-	/** @var Wixbu_Instructors_Dash Instance */
+/**
+ * Wixbu instructors main class
+ */
+class Wixbu_Instructors{
+
+	/** @var Wixbu_Instructors Instance */
 	private static $_instance = null;
 
 	/** @var string Token */
@@ -42,15 +39,15 @@ class Wixbu_Instructors_Dash{
 	/** @var string Plugin directory path */
 	public static $path;
 
-	/** @var Wixbu_Instructors_Dash_Admin Instance */
+	/** @var Wixbu_Instructors_Admin Instance */
 	public $admin;
 
-	/** @var Wixbu_Instructors_Dash_Public Instance */
+	/** @var Wixbu_Instructors_Public Instance */
 	public $public;
 
 	/**
 	 * Return class instance
-	 * @return Wixbu_Instructors_Dash instance
+	 * @return Wixbu_Instructors instance
 	 */
 	public static function instance( $file ) {
 		if ( null == self::$_instance ) {
@@ -67,7 +64,7 @@ class Wixbu_Instructors_Dash{
 	 */
 	private function __construct( $file ) {
 
-		self::$token   = 'wixbu-dash';
+		self::$token   = WXBIN;
 		self::$file    = $file;
 		self::$url     = plugin_dir_url( $file );
 		self::$path    = plugin_dir_path( $file );
@@ -81,6 +78,8 @@ class Wixbu_Instructors_Dash{
 		if ( class_exists( 'Wixbu_Dash' ) ) {
 			$this->_admin(); //Initiate admin
 			$this->_public(); //Initiate public
+		} else {
+			add_action( 'admin_notices', [ $this, 'wixbu_dash_required_notice' ] );
 		}
 	}
 
@@ -89,7 +88,7 @@ class Wixbu_Instructors_Dash{
 	 */
 	private function _admin() {
 		//Instantiating admin class
-		$this->admin = Wixbu_Instructors_Dash_Admin::instance();
+		$this->admin = Wixbu_Instructors_Admin::instance();
 
 		//Enqueue admin end JS and CSS
 		add_action( 'wp_ajax_wixbu_delete_user',	array( $this->admin, 'wp_ajax_wixbu_delete_user' ) );
@@ -101,14 +100,21 @@ class Wixbu_Instructors_Dash{
 	 */
 	private function _public() {
 		//Instantiating public class
-		$this->public = Wixbu_Instructors_Dash_Public::instance();
+		$this->public = Wixbu_Instructors_Public::instance();
 
 		//Enqueue front end JS and CSS
 		add_action( 'wp_enqueue_scripts',	array( $this->public, 'enqueue' ) );
 		add_filter( 'llms_get_student_dashboard_tabs',	array( $this->public, 'llms_get_student_dashboard_tabs' ), 11 );
 
 	}
+
+	public function wixbu_dash_required_notice() {
+		$class = 'notice notice-error';
+		$message = sprintf( __( 'Oops, Wixbu instructors plugin is required. %s Download %s', WXBIN ), '<a href="https://github.com/shramee/wixbu-dashboard">', '</a>' );
+
+		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+	}
 }
 
 /** Intantiating main plugin class */
-Wixbu_Instructors_Dash::instance( __FILE__ );
+Wixbu_Instructors::instance( __FILE__ );

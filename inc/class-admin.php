@@ -1,10 +1,10 @@
 <?php
 /**
- * Wixbu dashboard Admin class
+ * Wixbu instructors Admin class
  */
-class Wixbu_Instructors_Dash_Admin {
+class Wixbu_Instructors_Admin {
 
-	/** @var Wixbu_Instructors_Dash_Admin Instance */
+	/** @var Wixbu_Instructors_Admin Instance */
 	private static $_instance = null;
 
 	/* @var string $token Plugin token */
@@ -20,9 +20,9 @@ class Wixbu_Instructors_Dash_Admin {
 	public $version;
 
 	/**
-	 * Main Wixbu dashboard Instance
+	 * Main Wixbu instructors Instance
 	 * Ensures only one instance of Storefront_Extension_Boilerplate is loaded or can be loaded.
-	 * @return Wixbu_Instructors_Dash_Admin instance
+	 * @return Wixbu_Instructors_Admin instance
 	 * @since 	1.0.0
 	 */
 	public static function instance() {
@@ -38,10 +38,10 @@ class Wixbu_Instructors_Dash_Admin {
 	 * @since 	1.0.0
 	 */
 	private function __construct() {
-		$this->token   =   Wixbu_Instructors_Dash::$token;
-		$this->url     =   Wixbu_Instructors_Dash::$url;
-		$this->path    =   Wixbu_Instructors_Dash::$path;
-		$this->version =   Wixbu_Instructors_Dash::$version;
+		$this->token   =   Wixbu_Instructors::$token;
+		$this->url     =   Wixbu_Instructors::$url;
+		$this->path    =   Wixbu_Instructors::$path;
+		$this->version =   Wixbu_Instructors::$version;
 	} // End __construct()
 
 	/**

@@ -1,1 +1,1 @@
-# Wixbu dashboard
+# Wixbu instructors

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Wixbu dashboard public class
+ * Wixbu instructors public class
  */
-class Wixbu_Instructors_Dash_Public{
+class Wixbu_Instructors_Public{
 
-	/** @var Wixbu_Instructors_Dash_Public Instance */
+	/** @var Wixbu_Instructors_Public Instance */
 	private static $_instance = null;
 
 	/* @var string $token Plugin token */
@@ -21,8 +21,8 @@ class Wixbu_Instructors_Dash_Public{
 	public $version;
 
 	/**
-	 * Wixbu dashboard public class instance
-	 * @return Wixbu_Instructors_Dash_Public instance
+	 * Wixbu instructors public class instance
+	 * @return Wixbu_Instructors_Public instance
 	 */
 	public static function instance() {
 		if ( null == self::$_instance ) {
@@ -37,10 +37,10 @@ class Wixbu_Instructors_Dash_Public{
 	 * @since   1.0.0
 	 */
 	private function __construct() {
-		$this->token   =   Wixbu_Instructors_Dash::$token;
-		$this->url     =   Wixbu_Instructors_Dash::$url;
-		$this->path    =   Wixbu_Instructors_Dash::$path;
-		$this->version =   Wixbu_Instructors_Dash::$version;
+		$this->token   =   Wixbu_Instructors::$token;
+		$this->url     =   Wixbu_Instructors::$url;
+		$this->path    =   Wixbu_Instructors::$path;
+		$this->version =   Wixbu_Instructors::$version;
 	}
 
 	/**
@@ -86,13 +86,13 @@ class Wixbu_Instructors_Dash_Public{
 		$tabs['earnings-report'] = [
 			'content' => [ $this, 'earnings_report' ],
 			'endpoint' => 'earnings-report',
-			'title' => $this->_en_es( __( 'Earnings report', 'wixbu_instructors-dashboard' ), 'Informe de ganancias' ),
+			'title' => $this->_en_es( __( 'Earnings report', WXBIN ), 'Informe de ganancias' ),
 		];
 
 		$tabs['payment-gateway'] = [
 			'content' => [ $this, 'payment_gateway' ],
 			'endpoint' => 'payment-gateway',
-			'title' => $this->_en_es( __( 'Payment gateway', 'wixbu_instructors-dashboard' ), 'Cuenta de pago' ),
+			'title' => $this->_en_es( __( 'Payment gateway', WXBIN ), 'Cuenta de pago' ),
 		];
 
 		return $tabs;
