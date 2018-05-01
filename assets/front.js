@@ -1,7 +1,7 @@
 /**
  * Plugin front end scripts
  *
- * @package Wixbu_Dash
+ * @package Wixbu_Instructors_Dash
  * @version 1.0.0
  */
 jQuery(function ($) {

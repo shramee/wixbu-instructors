@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Wixbu dashboard
+Plugin Name: Wixbu instructor's dashboard
 Plugin URI: http://shramee.me/
-Description: Simple plugin starter for quick delivery
+Description: Sets instructors dashboard for Wixbu
 Author: Shramee
 Version: 1.0.0
 Author URI: http://shramee.me/
@@ -22,9 +22,9 @@ require 'inc/class-public.php';
  * @static string $path Plugin root dir path
  * @static string $version Plugin version
  */
-class Wixbu_Dash{
+class Wixbu_Instructors_Dash{
 
-	/** @var Wixbu_Dash Instance */
+	/** @var Wixbu_Instructors_Dash Instance */
 	private static $_instance = null;
 
 	/** @var string Token */
@@ -42,15 +42,15 @@ class Wixbu_Dash{
 	/** @var string Plugin directory path */
 	public static $path;
 
-	/** @var Wixbu_Dash_Admin Instance */
+	/** @var Wixbu_Instructors_Dash_Admin Instance */
 	public $admin;
 
-	/** @var Wixbu_Dash_Public Instance */
+	/** @var Wixbu_Instructors_Dash_Public Instance */
 	public $public;
 
 	/**
 	 * Return class instance
-	 * @return Wixbu_Dash instance
+	 * @return Wixbu_Instructors_Dash instance
 	 */
 	public static function instance( $file ) {
 		if ( null == self::$_instance ) {
@@ -73,9 +73,15 @@ class Wixbu_Dash{
 		self::$path    = plugin_dir_path( $file );
 		self::$version = '1.0.0';
 
-		$this->_admin(); //Initiate admin
-		$this->_public(); //Initiate public
+		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
 
+	}
+
+	public function plugins_loaded() {
+		if ( class_exists( 'Wixbu_Dash' ) ) {
+			$this->_admin(); //Initiate admin
+			$this->_public(); //Initiate public
+		}
 	}
 
 	/**
@@ -83,7 +89,7 @@ class Wixbu_Dash{
 	 */
 	private function _admin() {
 		//Instantiating admin class
-		$this->admin = Wixbu_Dash_Admin::instance();
+		$this->admin = Wixbu_Instructors_Dash_Admin::instance();
 
 		//Enqueue admin end JS and CSS
 		add_action( 'wp_ajax_wixbu_delete_user',	array( $this->admin, 'wp_ajax_wixbu_delete_user' ) );
@@ -95,19 +101,14 @@ class Wixbu_Dash{
 	 */
 	private function _public() {
 		//Instantiating public class
-		$this->public = Wixbu_Dash_Public::instance();
+		$this->public = Wixbu_Instructors_Dash_Public::instance();
 
 		//Enqueue front end JS and CSS
 		add_action( 'wp_enqueue_scripts',	array( $this->public, 'enqueue' ) );
-		add_filter( 'llms_get_student_dashboard_tabs',	array( $this->public, 'llms_get_student_dashboard_tabs' ) );
-		add_filter( 'llms_student_dashboard_default_tab',	array( $this->public, 'llms_student_dashboard_default_tab' ) );
-		add_filter( 'lifterlms_before_student_dashboard_content',	array( $this->public, 'lifterlms_before_student_dashboard_content' ), 25 );
-		add_filter( 'lifterlms_after_student_dashboard',	array( $this->public, 'lifterlms_after_student_dashboard' ), 5 );
-		add_filter( 'lifterlms_get_person_fields',	array( $this->public, 'lifterlms_get_person_fields' ), 99, 2 );
-		add_filter( 'lifterlms_update_account_redirect',	array( $this->public, 'lifterlms_update_account_redirect' ), 99, 2 );
+		add_filter( 'llms_get_student_dashboard_tabs',	array( $this->public, 'llms_get_student_dashboard_tabs' ), 11 );
 
 	}
 }
 
 /** Intantiating main plugin class */
-Wixbu_Dash::instance( __FILE__ );
+Wixbu_Instructors_Dash::instance( __FILE__ );
