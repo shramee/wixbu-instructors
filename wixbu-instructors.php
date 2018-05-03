@@ -19,26 +19,20 @@ define( 'WXBIN', 'wixbu-instructors' );
 /**
  * Wixbu instructors main class
  */
-class Wixbu_Instructors{
-
-	/** @var Wixbu_Instructors Instance */
-	private static $_instance = null;
+class Wixbu_Instructors {
 
 	/** @var string Token */
 	public static $token;
-
 	/** @var string Version */
 	public static $version;
-
 	/** @var string Plugin main __FILE__ */
 	public static $file;
-
 	/** @var string Plugin directory url */
 	public static $url;
-
 	/** @var string Plugin directory path */
 	public static $path;
-
+	/** @var Wixbu_Instructors Instance */
+	private static $_instance = null;
 	/** @var Wixbu_Instructors_Admin Instance */
 	public $admin;
 
@@ -46,19 +40,10 @@ class Wixbu_Instructors{
 	public $public;
 
 	/**
-	 * Return class instance
-	 * @return Wixbu_Instructors instance
-	 */
-	public static function instance( $file ) {
-		if ( null == self::$_instance ) {
-			self::$_instance = new self( $file );
-		}
-		return self::$_instance;
-	}
-
-	/**
 	 * Constructor function.
+	 *
 	 * @param string $file __FILE__ of the main plugin
+	 *
 	 * @access  private
 	 * @since   1.0.0
 	 */
@@ -72,6 +57,49 @@ class Wixbu_Instructors{
 
 		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
 
+	}
+
+	/**
+	 * Query user meta
+	 *
+	 * @param string|array $name_patt Meta key pattern match
+	 * @param int $uid User ID
+	 * @param string $query_suffix SQL query suffix
+	 *
+	 * @return array|null Results of query
+	 */
+	static function query_umeta( $name_patt, $uid = 0, $query_suffix = 'ORDER BY umeta_id DESC;' ) {
+		if ( ! $uid ) {
+			$uid = get_current_user_id();
+		}
+		if ( $uid ) {
+			/** @var wpdb $wpdb */
+			global $wpdb;
+			$select = '`meta_key` as `key`, `meta_value` as `value`';
+			// Escape for sql query
+			$name_patt = esc_sql( $name_patt );
+			if ( is_array( $name_patt ) ) {
+				$name_patt = implode( "' OR `meta_key` LIKE '", $name_patt );
+			}
+			return $wpdb->get_results(
+				"SELECT {$select} FROM {$wpdb->usermeta} " .
+				"WHERE ( `meta_key` LIKE '{$name_patt}' ) AND `user_id` = {$uid} " .
+				$query_suffix
+			);
+		}
+		return [];
+	}
+
+	/**
+	 * Return class instance
+	 * @return Wixbu_Instructors instance
+	 */
+	public static function instance( $file ) {
+		if ( null == self::$_instance ) {
+			self::$_instance = new self( $file );
+		}
+
+		return self::$_instance;
 	}
 
 	public function plugins_loaded() {
@@ -91,7 +119,7 @@ class Wixbu_Instructors{
 		$this->admin = Wixbu_Instructors_Admin::instance();
 
 		//Enqueue admin end JS and CSS
-		add_action( 'wp_ajax_wixbu_delete_user',	array( $this->admin, 'wp_ajax_wixbu_delete_user' ) );
+		add_action( 'wp_ajax_wixbu_delete_user', array( $this->admin, 'wp_ajax_wixbu_delete_user' ) );
 
 	}
 
@@ -103,13 +131,13 @@ class Wixbu_Instructors{
 		$this->public = Wixbu_Instructors_Public::instance();
 
 		//Enqueue front end JS and CSS
-		add_action( 'wp_enqueue_scripts',	array( $this->public, 'enqueue' ) );
-		add_filter( 'llms_get_student_dashboard_tabs',	array( $this->public, 'llms_get_student_dashboard_tabs' ), 11 );
+		add_action( 'wp_enqueue_scripts', array( $this->public, 'enqueue' ) );
+		add_filter( 'llms_get_student_dashboard_tabs', array( $this->public, 'llms_get_student_dashboard_tabs' ), 11 );
 
 	}
 
 	public function wixbu_dash_required_notice() {
-		$class = 'notice notice-error';
+		$class   = 'notice notice-error';
 		$message = sprintf( __( 'Oops, Wixbu instructors plugin is required. %s Download %s', WXBIN ), '<a target="_blank" href="https://github.com/shramee/wixbu-dashboard">', '</a>' );
 
 		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), $message );
