@@ -1,5 +1,5 @@
 <?php
-$courses_data = [
+$subscriptions_data = [
 	(object) [
 		'key'   => 'subs-20180502::james::gold',
 		'value' => '20::19::Gold',
@@ -50,7 +50,7 @@ $table_data = [];
 
 if ( ! empty( $_GET['wer_record'] ) ) {
 	// @TODO Use $_GET['wer_record'] to grab user meta
-	$sale_meta = array_values( array_filter( $courses_data, function ( $row ) {
+	$sale_meta = array_values( array_filter( $subscriptions_data, function ( $row ) {
 		return $row->key === $_GET['wer_record'];
 	} ) )[0]->value;
 
@@ -91,11 +91,11 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 
 	if ( ! empty( $_GET['wer_course'] ) ) {
 		// @TODO Use $_GET['wer_course'] to only grab rows for specified course sales
-		$courses_data = array_filter( $courses_data, function ( $row ) {
+		$subscriptions_data = array_filter( $subscriptions_data, function ( $row ) {
 			return false !== strpos( $row->key, $_GET['wer_course'] );
 		} );
 
-		foreach ( $courses_data as $row ) {
+		foreach ( $subscriptions_data as $row ) {
 			$k            = explode( '::', $row->key );
 			$datum        = explode( '::', $row->value );
 			$table_data[] = [
@@ -125,7 +125,7 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 	} else {
 		// @TODO Grab rows for course sales
 
-		foreach ( $courses_data as $row ) {
+		foreach ( $subscriptions_data as $row ) {
 			$k     = explode( '::', $row->key );
 			$datum = explode( '::', $row->value );
 			if ( ! isset( $table_data[ $k[2] ] ) ) {

@@ -4,6 +4,12 @@
  * @package Wixbu_Instructors
  * @version 1.0.0
  */
+nav.llms-sd-nav.llms-sd-nav {
+  width: 230px; }
+
+div.wixbu-dash-content-wrap {
+  width: calc( 100% - 250px ); }
+
 #wixbu-earnings-report .lifterlms-price {
   font-family: sans-serif;
   width: 79px;
