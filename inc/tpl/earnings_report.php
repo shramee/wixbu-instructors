@@ -1,16 +1,16 @@
 <?php
 wp_enqueue_style( WXBIN . '-css' );
 
-$tabs   = [
+$tabs = [
 	'refunds'       => 'Refunds',
-	'courses'       => 'Courses',
+	'sales'         => 'Sales',
 	'subscriptions' => 'Subscriptions',
 	'global'        => 'Global',
 ];
 $tabnow = filter_input( INPUT_GET, 'tab' );
 
 if ( ! isset( $tabs[ $tabnow ] ) ) {
-	$tabnow = 'courses';
+	$tabnow = 'sales';
 }
 $wixbu_earnings_report_show_time_range = true;
 $wixbu_from = filter_input( INPUT_GET, 'from' );

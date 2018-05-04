@@ -7,7 +7,7 @@
 			$value = llms_price( array_sum( $value ) );
 		}
 		?>
-		<div class="llms-form-field llms-cols-3 elementor-align-center">
+		<div class="tile">
 			<div class="futura-li">
 				<?php echo $label ?>
 				<?php echo $help ?>

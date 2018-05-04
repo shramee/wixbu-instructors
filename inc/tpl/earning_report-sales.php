@@ -61,7 +61,7 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 
 	$date       = substr( $date, 6, 2 ) . '-' . substr( $date, 4, 2 ) . '-' . substr( $date, 2, 2 );
 	$table_data = [
-		[ 'Date', 'Student', 'Course name', 'Price Paid', 'Net Income', 'Your Share', ],
+		[ '<p class="date">Date</p>', 'Student', 'Course name', '<p class="tac">Price Paid</p>', '<p class="tac">Net Income</p>', '<p class="tac">Your Share</p>', ],
 		[ $date, "<span class='futura'>$k[1]</span>", $datum[2], [ $datum[0] ], [ $datum[1] ], [ .7 * $datum[1] ], ],
 	];
 
@@ -109,7 +109,7 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 			$numbers_data['Your share']['value'][] = .7 * $datum[1];
 		}
 
-		$table_header = [ [ 'Students', '# Sales', 'Net Income', 'Your Share', ] ];
+		$table_header = [ [ 'Students', '# Sales', '<p class="tac">Net Income</p>', '<p class="tac">Your Share</p>', ] ];
 		$table_footer = [ [ '', '', '<b class="lifterlms-price">TOTAL</b>', $numbers_data['Your share']['value'], ] ];
 
 		?>
@@ -144,7 +144,7 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 			$numbers_data['Your share']['value'][] = .7 * $datum[1];
 		}
 
-		$table_header = [ [ 'Course', '# Sales', 'Net Income', 'Your Share', ] ];
+		$table_header = [ [ 'Course', '# Sales', '<p class="tac">Net Income</p>', '<p class="tac">Your Share</p>', ] ];
 		$table_footer = [ [ '', '', '<b class="lifterlms-price">TOTAL</b>', $numbers_data['Your share']['value'], ] ];
 
 	}

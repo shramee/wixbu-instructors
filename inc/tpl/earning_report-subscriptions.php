@@ -60,7 +60,7 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 	$date       = str_replace( 'subs-', '', $k[0] );
 	$date       = substr( $date, 6, 2 ) . '-' . substr( $date, 4, 2 ) . '-' . substr( $date, 2, 2 );
 	$table_data = [
-		[ 'Date', 'Student', 'Membership name', 'Price Paid', 'Net Income', 'Your Share', ],
+		[ '<p class="date">Date</p>', 'Student', 'Membership name', 'Price Paid', 'Net Income', 'Your Share', ],
 		[ $date, "<span class='futura'>$k[1]</span>", $datum[2], [ $datum[0] ], [ $datum[1] ], [ .7 * $datum[1] ], ],
 	];
 

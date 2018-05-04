@@ -4,6 +4,10 @@
  * @package Wixbu_Instructors
  * @version 1.0.0
  */
+.earnings-report nav.llms-sd-nav {
+
+}
+
 #wixbu-earnings-report {
 	.lifterlms-price {
 		font-family: sans-serif;
@@ -28,7 +32,7 @@
 	a.wer-tab {
 		text-transform: uppercase;
 		color: #777;
-		font: 400 15px/20px futura, sans-serif;
+		font: 400 14px/20px futura, sans-serif;
 	}
 
 	.futura-li {
@@ -67,16 +71,19 @@
 	}
 
 	.wer-numbers {
+		display: flex;
+		width: 100%;
 		&:after {
 			content: '';
 			display: block;
 			clear: both;
 		}
-
-		.llms-form-field {
-			padding: 1.6em;
+		.tile {
+			text-align: center;
+			padding: calc( .7em + 1% );
 			> * {
-				line-height: 3.5;
+				line-height: 1.6;
+				padding: 0.7em 0 ;
 			}
 			> .futura-li {
 				border-bottom: 2px solid #ddd;
@@ -110,18 +117,27 @@
 	}
 
 	.wer-table-wrap {
-		margin: 1.6em;
-		padding: 2em;
+		margin: calc( .7em + 1% );
+		padding: calc( .7em + 1% );
 		max-height: 340px;
 		overflow: auto;
 		border-color: #ccc;
 		table {
 			margin: 0;
+			p {
+				margin: 0;
+			}
+			.tac {
+				text-align: center;
+			}
+			.date {
+				min-width: 70px;
+			}
 			&, th, td {
 				border: none;
 			}
 			th {
-				font: 16px futura, sans-serif;
+				font: 14px futura, sans-serif;
 				text-transform: uppercase;
 				padding-bottom: 1.6em;
 				color: #aaa;
@@ -152,7 +168,7 @@
 		margin-left: 14px;
 		border-top: 2px solid #ccc;
 		margin-bottom: .7em;
-
+	}
 
 	.wer-accurate-info {
 		.fa-asterisk {
@@ -162,13 +178,19 @@
 	}
 
 	.wer-time-range {
-		margin-top: 2.5em;
+		margin-top: 1.6em;
+		input {
+			width: calc( 49% - 22px );
+		}
 		a, input {
 			display: inline-block;
-			margin-left: .7em;
+			margin-top: .7em;
+			margin-left: 9px;
 		}
 		form {
-			margin: 0 0 0 .7em;
+			width: 43%;
+			min-width: 320px;
+			margin: 0 0 0 9px;
 		}
 		*:first-child {
 			margin-left: 0;
