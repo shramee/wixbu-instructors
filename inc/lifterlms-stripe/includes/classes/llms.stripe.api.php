@@ -41,15 +41,38 @@ class LLMS_Stripe_API {
 
 		$gateway = LLMS()->payment_gateways()->get_gateway_by_id( 'stripe' );
 
+		$headers = array(
+			'Authorization'  => 'Basic ' . base64_encode( $gateway->get_secret_key() . ':' ),
+			'Stripe-Version' => apply_filters( 'llms_stripe_api_version', '2017-06-05' ),
+		);
+
+		$author_paid = null;
+
+		if ( $resource == 'charges' ) {
+			$plan = new LLMS_Access_Plan( $_GET['plan'] );
+
+			if ( $plan ) {
+				$product = $plan->get_product();
+				$author_paid = $product->author;
+				if ( $product && $product->author ) {
+					$stripe_account = get_user_meta( $product->author, 'stripe_user_id', 1 );
+					if ( $stripe_account ) {
+						$data['application_fee'] = $data['amount'] * .4;
+						$headers['Stripe-Account'] = $stripe_account;
+					}
+				}
+			}
+			if ( empty( $headers['Stripe-Account'] ) ) {
+				return $this->set_error( __( 'Sorry, Payment method not added by instructor.', 'wixbu' ), 'no_payment_methos', [] );
+			}
+		}
+
 		// attempt to call the API
 		$response = wp_safe_remote_post(
 			'https://api.stripe.com/v1/' . $resource,
 			array(
 				'body'    => $data,
-				'headers' => array(
-					'Authorization'  => 'Basic ' . base64_encode( $gateway->get_secret_key() . ':' ),
-					'Stripe-Version' => apply_filters( 'llms_stripe_api_version', '2017-06-05' ),
-				),
+				'headers' => $headers,
 				'method'     => $method,
 				'timeout'    => 70,
 				'user-agent' => 'LifterLMS ' . LLMS_VERSION

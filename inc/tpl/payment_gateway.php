@@ -1,18 +1,25 @@
 <?php
-$client_id = 'ca_Ben96eD05ONMEGhXtDOfmJUNjUdoAlIF';
 
 $account_id = get_user_meta( get_current_user_id(), 'stripe_user_id', 1 );
 
 if ( isset( $_REQUEST['code'] ) ) {
 	if ( $_REQUEST['code'] ) {
+		/** @var LLMS_Payment_Gateway_Stripe $gateway */
+		$gateway = LLMS()->payment_gateways()->get_gateway_by_id( 'stripe' );
+
 		$auth_code = $_REQUEST['code'];
-		$secret     = get_option( 'llms_gateway_stripe_live_secret_key' );
+		$client_id = 'ca_Ben9mXacDyauRq9pngU0rkKuDvgYs6kN';
+		$secret     = $gateway->get_secret_key();
+
+		if ( 'live' === $gateway->get_api_mode() ) {
+			$client_id = 'ca_Ben96eD05ONMEGhXtDOfmJUNjUdoAlIF';
+		}
 
 		$ch = curl_init();
 
 		curl_setopt( $ch, CURLOPT_URL, "https://connect.stripe.com/oauth/token" );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, 'client_secret=' . $secret . '&code="' . $auth_code . '"&grant_type=authorization_code' );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, "client_secret=$secret&code=$auth_code&grant_type=authorization_code" );
 		curl_setopt( $ch, CURLOPT_POST, 1 );
 
 		$headers   = array();
@@ -25,6 +32,7 @@ if ( isset( $_REQUEST['code'] ) ) {
 			if ( isset( $result['stripe_user_id'] ) ) {
 				update_user_meta( get_current_user_id(), 'stripe_user_id', $result['stripe_user_id'] );
 				update_user_meta( get_current_user_id(), 'stripe_publishable_key', $result['stripe_publishable_key'] );
+				$account_id = $result['stripe_user_id'];
 			} else {
 				echo '<h4 style="color:#c30;">An error occured: ' . $result['error_description'] . '<br>Please try again later or contact admin.</h4>';
 			}
@@ -33,6 +41,7 @@ if ( isset( $_REQUEST['code'] ) ) {
 	} else {
 		delete_user_meta( get_current_user_id(), 'stripe_user_id' );
 		delete_user_meta( get_current_user_id(), 'stripe_publishable_key' );
+		$account_id = '';
 	}
 }
 ?>
