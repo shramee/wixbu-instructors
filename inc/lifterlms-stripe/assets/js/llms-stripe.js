@@ -219,38 +219,16 @@
 		// get a token
 		llms_stripe.get_token( function( token, err ) {
 
-			// error
-			if ( ! token ) {
-
-				if ( err && err.code ) {
-
-					response = self.get_error( err.code, err.message );
-
-				} else {
-
-					response = self.get_error( err.code, err.message );
-
-				}
-
-			}
-
 			// success
-			else if ( token && token.id && token.card && token.card.id ) {
-
+			if ( token && token.id && token.card && token.card.id ) {
 				$( '#llms_stripe_token' ).val( token.id );
 				$( '#llms_stripe_card_id' ).val( token.card.id )
-
-			}
-
-			// wut?
-			else {
-
+			} else {
+				// error
 				response = self.get_error( err.code, err.message );
-
 			}
 
 			callback( response );
-
 		} );
 
 	};

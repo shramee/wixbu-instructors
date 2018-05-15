@@ -13,6 +13,7 @@ class LLMS_Stripe_Assets {
 	public function __construct() {
 
 		add_action( 'wp', array( $this, 'init' ) );
+		add_action( 'wp_ajax_llms_stripe_token', array( $this, 'llms_stripe_token' ) );
 
 	}
 
@@ -34,17 +35,20 @@ class LLMS_Stripe_Assets {
 			wp_register_script('lifterlms-stripe', plugins_url('assets/js/llms-stripe' . $min . '.js', LLMS_STRIPE_PLUGIN_FILE), array('jquery', 'stripe', 'llms-form-checkout'), LLMS_STRIPE_VERSION, true);
 			wp_enqueue_script('lifterlms-stripe');
 
+			/** @var LLMS_Payment_Gateway_Stripe $stripe */
 			$stripe = LLMS()->payment_gateways()->get_gateway_by_id('stripe');
 
 			// localize the script
 			wp_localize_script('lifterlms-stripe', 'llms_stripe', array(
 				'publishable_key' => $stripe->get_publishable_key(),
+				'tkn_ajax_url' => admin_url( 'admin-ajax.php?action=llms_stripe_token' ),
 			));
-
 		}
-
 	}
 
+	public function llms_stripe_token() {
+
+	}
 
 	/**
 	 * Get started

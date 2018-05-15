@@ -33,7 +33,7 @@ class LLMS_Stripe_API {
 	 * @param  string $resource  url endpoint or resource to make a request to
 	 * @param  array  $data      array of data to pass in the body of the request
 	 * @param  string $method    method of request (POST, GET, DELETE, PUT, etc...)
-	 * @return void
+	 * @return mixed
 	 * @since  2.0.0
 	 * @version  2.0.0
 	 */
@@ -46,24 +46,10 @@ class LLMS_Stripe_API {
 			'Stripe-Version' => apply_filters( 'llms_stripe_api_version', '2017-06-05' ),
 		);
 
-		$author_paid = null;
-
-		if ( $resource == 'charges' ) {
-			$plan = new LLMS_Access_Plan( $_GET['plan'] );
-
-			if ( $plan ) {
-				$product = $plan->get_product();
-				$author_paid = $product->author;
-				if ( $product && $product->author ) {
-					$stripe_account = get_user_meta( $product->author, 'stripe_user_id', 1 );
-					if ( $stripe_account ) {
-						$data['application_fee'] = $data['amount'] * .4;
-						$headers['Stripe-Account'] = $stripe_account;
-					}
-				}
-			}
-			if ( empty( $headers['Stripe-Account'] ) ) {
-				return $this->set_error( __( 'Sorry, Payment method not added by instructor.', 'wixbu' ), 'no_payment_methos', [] );
+		if ( in_array( $resource, [ 'charges', 'subscriptions' ] ) ) {
+			$connect_success = $this->connect_fields( $resource, $headers, $data );
+			if ( ! $connect_success ) {
+				return $connect_success;
 			}
 		}
 
@@ -71,27 +57,107 @@ class LLMS_Stripe_API {
 		$response = wp_safe_remote_post(
 			'https://api.stripe.com/v1/' . $resource,
 			array(
-				'body'    => $data,
-				'headers' => $headers,
+				'body'       => $data,
+				'headers'    => $headers,
 				'method'     => $method,
 				'timeout'    => 70,
 				'user-agent' => 'LifterLMS ' . LLMS_VERSION
 			)
-
 		);
+
+		error_log( var_export( [
+			$resource,
+			'data' => $data,
+			'headers' => $headers,
+			'response' => json_decode( $response['body'], 1 ),
+		], 1 ) );
+
+		$result = $this->parse_response( $response );
+
+		if ( $result ) {
+			return $this->result = $result;
+		} else {
+			return $result;
+		}
+	}
+
+	/**
+	 * @param string $resource Request headers
+	 * @param array $headers Request headers
+	 * @param array $data Request data
+	 * @return bool Success
+	 */
+	private function connect_fields( $resource, &$headers, &$data ) {
+			$plan = new LLMS_Access_Plan( $_GET['plan'] );
+			if ( $plan ) {
+				$product     = $plan->get_product();
+				if ( $product && $product->author ) {
+					$stripe_account = get_user_meta( $product->author, 'stripe_user_id', 1 );
+					if ( $stripe_account ) {
+						if ( ! empty( $data['amount'] ) ) {
+							$lms_charge = .4;
+							$taxes      = Taxes_LLMS_Quaderno::get_tax();
+							if ( ! $taxes['error'] && $taxes['data']['name'] ) {
+								$lms_charge += $taxes['data']['rate'] / 100;
+							}
+							if ( $resource == 'charges' ) {
+								$data['application_fee'] = $data['amount'] * $lms_charge;
+							} else {
+								$data['application_fee_percent'] = $lms_charge;
+							}
+						}
+						$headers['Stripe-Account'] = $stripe_account;
+						$data['source'] = $this->get_instructor_customer_token( $headers, $data );
+						unset( $data['customer'] );
+					}
+				}
+			}
+			if ( empty( $headers['Stripe-Account'] ) ) {
+				return $this->set_error( __( 'Sorry, Payment method not added by instructor.', 'wixbu' ), 'no_payment_method', new stdClass() );
+			}
+		return true;
+	}
+
+	private function get_instructor_customer_token( $headers, $original_data ) {
+		$data = [
+			'customer' => $original_data['customer'],
+			'card' => $original_data['source'],
+		];
+//
+//		$headers = [
+//			'Stripe-Account' => $headers['Stripe-Account']
+//		];
+
+		$response = wp_safe_remote_post(
+			'https://api.stripe.com/v1/tokens',
+			array(
+				'body'       => $data,
+				'headers'    => $headers,
+			)
+		);
+
+		$result = $this->parse_response( $response );
+
+		if ( $result ) {
+			return $result->id;
+		}
+	}
+
+	/**
+	 * @param $response
+	 *
+	 * @return bool
+	 */
+	private function parse_response( $response ) {
 
 		// connection error
 		if ( is_wp_error( $response ) ) {
-
 			return $this->set_error( __( 'There was a problem connecting to the payment gateway.', 'lifterlms-stripe' ), 'gateway_connection', $response );
-
 		}
 
 		// empty body
 		if ( empty( $response['body'] ) ) {
-
 			return $this->set_error( __( 'Empty Response.', 'lifterlms-stripe' ), 'empty_response', $response );
-
 		}
 
 		// parse the response body
@@ -99,13 +165,9 @@ class LLMS_Stripe_API {
 
 		// Handle response
 		if ( ! empty( $parsed->error ) ) {
-
 			return $this->set_error( $parsed->error->message, $parsed->error->type, $response );
-
 		} else {
-
-			$this->result = $parsed;
-
+			return $parsed;
 		}
 
 	}
