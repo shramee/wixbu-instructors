@@ -68,11 +68,29 @@ if ( 0 < version_compare( $wixbu_from, $wixbu_to ) ) {
 			] ); ?>">
 				<?php $this->e_en_es( __( 'Last year', WXBIN ), 'El año pasado' ); ?></a>
 
-			<form class="alignright">
+			<form class="alignright" id="wixbu-reports-term">
 				<input type="date" value="<?php echo $wixbu_from ?>" name="from">
 				<a class="futura-li">To</a>
 				<input type="date" value="<?php echo $wixbu_to ?>" name="to">
+				<input type="hidden" name="tab" value="<?php echo $tabnow ?>">
 			</form>
+			<script>
+				(
+					function ( $ ) {
+						var
+							$form = $( '#wixbu-reports-term' ),
+							timeout = 0;
+						$form.find( 'input[type="date"]' ).change( function() {
+							if ( timeout ) {
+								clearTimeout( timeout );
+							}
+							timeout = setTimeout( function () {
+								$form.submit();
+							}, 1600 );
+						} );
+					}
+				)( jQuery );
+			</script>
 		</div>
 		<?php
 	}

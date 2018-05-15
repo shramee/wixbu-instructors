@@ -108,7 +108,7 @@ div.wixbu-dash-content-wrap {
     #wixbu-earnings-report .wer-table-wrap table th {
       font: 14px futura, sans-serif;
       text-transform: uppercase;
-      padding-bottom: 1.6em;
+      padding: 1.6em 8px;
       color: #aaa; }
 #wixbu-earnings-report *::-webkit-scrollbar {
   border-radius: 7px;

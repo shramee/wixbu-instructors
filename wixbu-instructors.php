@@ -17,6 +17,8 @@ require 'inc/class-public.php';
 require 'inc/lifterlms-stripe/lifterlms-stripe.php';
 
 define( 'WXBIN', 'wixbu-instructors' );
+define( 'WIXBU_COMMISSION', 40 );
+define( 'INSTRUCTOR_SHARE', 100 - WIXBU_COMMISSION );
 
 /**
  * Wixbu instructors main class
@@ -70,26 +72,52 @@ class Wixbu_Instructors {
 	 *
 	 * @return array|null Results of query
 	 */
-	static function query_umeta( $name_patt, $uid = 0, $query_suffix = 'ORDER BY umeta_id DESC;' ) {
+	static function query_umeta( $name_patt, $uid = 0, $query_suffix = null ) {
 		if ( ! $uid ) {
 			$uid = get_current_user_id();
 		}
+		$results = [];
 		if ( $uid ) {
 			/** @var wpdb $wpdb */
 			global $wpdb;
-			$select = '`meta_key` as `key`, `meta_value` as `value`';
 			// Escape for sql query
 			$name_patt = esc_sql( $name_patt );
 			if ( is_array( $name_patt ) ) {
 				$name_patt = implode( "' OR `meta_key` LIKE '", $name_patt );
 			}
-			return $wpdb->get_results(
+			$results = self::query_umeta_table( "`meta_key` LIKE '{$name_patt}'", $uid, $query_suffix );
+		}
+		return $results;
+	}
+
+	/**
+	 * @param string $where WHERE part of the query
+	 * @param string $query_suffix SQL query suffix
+	 * @param int $uid User ID
+	 * @param string $select
+	 *
+	 * @return array|null Results of query
+	 */
+	static function query_umeta_table( $where, $uid = 0, $query_suffix = null, $select = null ) {
+		if ( ! $uid ) {
+			$uid = get_current_user_id();
+		}
+
+		if ( ! $select ) $select = '`meta_key` as `key`, `meta_value` as `value`';
+
+		if ( ! $query_suffix ) $query_suffix = 'ORDER BY umeta_id DESC;';
+
+		$results = [];
+		if ( $uid ) {
+			/** @var wpdb $wpdb */
+			global $wpdb;
+			$results = $wpdb->get_results(
 				"SELECT {$select} FROM {$wpdb->usermeta} " .
-				"WHERE ( `meta_key` LIKE '{$name_patt}' ) AND `user_id` = {$uid} " .
+				"WHERE ( {$where} ) AND `user_id` = {$uid} " .
 				$query_suffix
 			);
 		}
-		return [];
+		return $results;
 	}
 
 	/**

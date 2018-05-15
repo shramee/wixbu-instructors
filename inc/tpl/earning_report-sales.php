@@ -1,35 +1,9 @@
 <?php
-// @TODO Remove demo data later
-$courses_data = [
-	(object) [
-		'key'   => 'sale-20171211::jack::photoshop-essentials',
-		'value' => '20::19::Photoshop essentials'
-	],
-	(object) [
-		'key'   => 'sale-20180416::jane::photoshop-essentials',
-		'value' => '20::19::Photoshop essentials'
-	],
-	(object) [
-		'key'   => 'sale-20180421::rose::grace-me-up',
-		'value' => '25::23.75::Grace me up'
-	],
-	(object) [
-		'key'   => 'sale-20180425::rose::marketing-tactics',
-		'value' => '50::47.5::Marketing tactics'
-	],
-	(object) [
-		'key'   => 'sale-20180428::jane::marketing-tactics',
-		'value' => '50::47.5::Marketing tactics'
-	],
-	(object) [
-		'key'   => 'sale-20180502::phil::marketing-tactics',
-		'value' => '50::47.5::Marketing tactics'
-	],
-	(object) [
-		'key'   => 'sale-20180503::ronald::photoshop-essentials',
-		'value' => '20::19::Photoshop essentials'
-	],
-];
+$from = str_replace( '-', '', $wixbu_from );
+$to = str_replace( '-', '', $wixbu_to );
+$courses_data = Wixbu_Instructors::query_umeta_table(
+	"`meta_key` BETWEEN 'sale-{$from}0' AND 'sale-{$to}z'"
+);
 
 $numbers_data = [
 	'# Sales'    => [
@@ -42,7 +16,7 @@ $numbers_data = [
 	],
 	'Your share' => [
 		'value' => [ 0 ],
-		'help'  => sprintf( __( '%s of net income. To learn more please %s click here %s.', WXBIN ), '70%', '<a href="https://wixbu.com/metodos-de-pagos">', '</a>' ),
+		'help'  => sprintf( __( '%s of net income. To learn more please %s click here %s.', WXBIN ), '60%', '<a href="https://wixbu.com/metodos-de-pagos">', '</a>' ),
 	],
 ];
 
@@ -57,12 +31,11 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 	$k     = explode( '::', $_GET['wer_record'] );
 	$datum = explode( '::', $sale_meta );
 
-	$date = str_replace( 'sale-', '', $k[0] );
-
+	$date       = substr( $k[0], 5 );
 	$date       = substr( $date, 6, 2 ) . '-' . substr( $date, 4, 2 ) . '-' . substr( $date, 2, 2 );
 	$table_data = [
 		[ '<p class="date">Date</p>', 'Student', 'Course name', '<p class="tac">Price Paid</p>', '<p class="tac">Net Income</p>', '<p class="tac">Your Share</p>', ],
-		[ $date, "<span class='futura'>$k[1]</span>", $datum[2], [ $datum[0] ], [ $datum[1] ], [ .7 * $datum[1] ], ],
+		[ $date, "<span class='futura'>$k[1]</span>", $datum[2], [ $datum[0] ], [ $datum[1] ], [ $datum[1] * INSTRUCTOR_SHARE / 100 ], ],
 	];
 
 	?>
@@ -102,11 +75,11 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 				'<a href="?wer_record=' . $row->key . '" class="futura">' . $k[1] . '</a>',
 				1,
 				[ $datum[1] ],
-				[ .7 * $datum[1] ],
+				[ $datum[1] * INSTRUCTOR_SHARE / 100 ],
 			];
 			$numbers_data['# Sales']['value'] ++;
 			$numbers_data['Net Income']['value'][] = $datum[1];
-			$numbers_data['Your share']['value'][] = .7 * $datum[1];
+			$numbers_data['Your share']['value'][] = $datum[1] * INSTRUCTOR_SHARE / 100;
 		}
 
 		$table_header = [ [ 'Students', '# Sales', '<p class="tac">Net Income</p>', '<p class="tac">Your Share</p>', ] ];
@@ -138,10 +111,10 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 			}
 			$table_data[ $k[2] ][1] ++;
 			$table_data[ $k[2] ][2][] = $datum[1];
-			$table_data[ $k[2] ][3][] = .7 * $datum[1];
+			$table_data[ $k[2] ][3][] = $datum[1] * INSTRUCTOR_SHARE / 100;
 			$numbers_data['# Sales']['value'] ++;
 			$numbers_data['Net Income']['value'][] = $datum[1];
-			$numbers_data['Your share']['value'][] = .7 * $datum[1];
+			$numbers_data['Your share']['value'][] = $datum[1] * INSTRUCTOR_SHARE / 100;
 		}
 
 		$table_header = [ [ 'Course', '# Sales', '<p class="tac">Net Income</p>', '<p class="tac">Your Share</p>', ] ];
@@ -155,6 +128,8 @@ if ( ! empty( $_GET['wer_record'] ) ) {
 			$table_data,
 			$table_footer
 		);
+	} else {
+		$table_data = [ [ 'Sorry, no stats available yet.', ] ];
 	}
 	?>
 	<div class="last-row-last-cols-overline">

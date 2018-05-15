@@ -180,12 +180,13 @@ class LLMS_Payment_Gateway_Stripe extends LLMS_Payment_Gateway {
 				'currency' => $order->get( 'currency' ),
 				'customer' => $order->get( 'gateway_customer_id' ),
 				'metadata' => array(
-					__( 'Access Plan Name', 'lifterlms-stripe' ) => $order->get( 'plan_title' ),
-					__( 'Access Plan SKU', 'lifterlms-stripe' ) => $order->get( 'plan_sku' ),
-					__( 'Access Plan ID', 'lifterlms-stripe' ) => $order->get( 'plan_id' ),
-					__( 'Product Name', 'lifterlms-stripe' ) => $order->get( 'product_title' ),
-					__( 'Product SKU', 'lifterlms-stripe' ) => $order->get( 'product_sku' ),
-					__( 'Product ID', 'lifterlms-stripe' ) => $order->get( 'product_id' ),
+					__( 'AccessPlanName', 'lifterlms-stripe' ) => $order->get( 'plan_title' ),
+					__( 'AccessPlanSKU', 'lifterlms-stripe' ) => $order->get( 'plan_sku' ),
+					__( 'AccessPlanID', 'lifterlms-stripe' ) => $order->get( 'plan_id' ),
+					__( 'ProductName', 'lifterlms-stripe' ) => $order->get( 'product_title' ),
+					__( 'ProductSKU', 'lifterlms-stripe' ) => $order->get( 'product_sku' ),
+					__( 'ProductID', 'lifterlms-stripe' ) => $order->get( 'product_id' ),
+					__( 'ProductType', 'lifterlms-stripe' ) => $order->get( 'product_type' ),
 				),
 				'source' => $order->get( 'gateway_source_id' ),
 				'statement_descriptor' => llms_trim_string( apply_filters( 'llms_stripe_statement_descriptor', get_bloginfo( 'name' ) . ' - ' . ucwords( $order->get( 'product_type' ) ), $order ), 22 ),
@@ -223,7 +224,7 @@ class LLMS_Payment_Gateway_Stripe extends LLMS_Payment_Gateway {
 				$this->log( $r, 'Stripe `charge()` finished' );
 
 				// return the transaction
-				return $r->get_result();
+				return $data;
 
 			}
 
@@ -635,6 +636,9 @@ class LLMS_Payment_Gateway_Stripe extends LLMS_Payment_Gateway {
 		} else {
 
 			$this->log( $charge, 'Stripe `handle_pending_order()` finished' );
+
+			$this->add_earning_report_field( $charge );
+
 			$this->complete_transaction( $order );
 
 		}
@@ -859,6 +863,21 @@ class LLMS_Payment_Gateway_Stripe extends LLMS_Payment_Gateway {
 
 		return $fields;
 
+	}
+
+	private function add_earning_report_field( $charge ) {
+		$meta = (array)$charge->metadata;
+
+		$amount = $charge->amount / 100;
+		$net = +$meta['NetReceived'];
+
+		$type = $meta['ProductType'] == 'membership' ? 'subs' : 'sale';
+		$time = date('Ymd');
+		update_user_meta(
+			$meta['Instructor'],
+			"$type-$time::$meta[Student]::$meta[ProductName]",
+			"$amount::$net::$meta[ProductName]"
+		);
 	}
 
 }
