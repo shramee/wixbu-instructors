@@ -14,8 +14,6 @@ require 'inc/class-admin.php';
 /** Plugin public class */
 require 'inc/class-public.php';
 
-require 'inc/lifterlms-stripe/lifterlms-stripe.php';
-
 define( 'WXBIN', 'wixbu-instructors' );
 define( 'WIXBU_COMMISSION', 40 );
 define( 'INSTRUCTOR_SHARE', 100 - WIXBU_COMMISSION );
