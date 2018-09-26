@@ -44,6 +44,11 @@ if ( isset( $_REQUEST['code'] ) ) {
 		$account_id = '';
 	}
 }
+
+Wixbu_Instructors_Public::second_level_tabs( [
+	'settings' => __( 'Stripe', 'lifterlms' ),
+] );
+
 ?>
 
 <div class="llms-person-form-wrapper">

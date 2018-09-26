@@ -2,16 +2,17 @@
 wp_enqueue_style( WXBIN . '-css' );
 
 $tabs = [
-	'refunds'       => 'Refunds',
-	'sales'         => 'Sales',
-	'subscriptions' => 'Subscriptions',
-	'global'        => 'Global',
+	'?tab=year'  => 'This year',
+	'?tab=month' => 'This month',
+	'?tab=week'  => 'This week',
 ];
 $tabnow = filter_input( INPUT_GET, 'tab' );
 
 if ( ! isset( $tabs[ $tabnow ] ) ) {
-	$tabnow = 'sales';
+	$tabnow = 'week';
+	$_GET['tab'] = $tabnow;
 }
+
 $wixbu_earnings_report_show_time_range = true;
 $wixbu_from = filter_input( INPUT_GET, 'from' );
 $wixbu_to = filter_input( INPUT_GET, 'to' );
@@ -25,21 +26,16 @@ if ( ! $wixbu_to ) {
 if ( 0 < version_compare( $wixbu_from, $wixbu_to ) ) {
 	$wixbu_to = $wixbu_from;
 }
+
+Wixbu_Instructors_Public::second_level_tabs( [
+	'?tab=year'  => __( 'This year', 'wixbu' ),
+	'?tab=month' => __( 'This month', 'wixbu' ),
+	'?tab=week'  => __( 'This week', 'wixbu' ),
+] );
+
 ?>
 
 <div id="wixbu-earnings-report">
-
-	<div class="wer-tabs">
-		<?php
-		foreach ( $tabs as $k => $tab ) {
-			$classes = 'wer-tab';
-			if ( $k == $tabnow ) {
-				$classes .= ' wer-active';
-			}
-			echo "<a class='$classes' href='?tab=$k'>$tab</a>";
-		}
-		?>
-	</div>
 	<div class="wer-tab-content" id="wer-tab-<?php echo $tabnow; ?>">
 		<?php
 		include "earning_report-$tabnow.php";

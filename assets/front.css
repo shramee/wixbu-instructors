@@ -34,24 +34,6 @@ div.wixbu-dash-content-wrap {
   color: #aaa; }
 #wixbu-earnings-report .info-text {
   color: inherit; }
-#wixbu-earnings-report .wer-tabs {
-  float: right;
-  display: flex;
-  margin-bottom: -2px; }
-  #wixbu-earnings-report .wer-tabs .wer-tab {
-    display: block;
-    border-radius: 0; }
-    #wixbu-earnings-report .wer-tabs .wer-tab.wer-active {
-      border-bottom-color: #fff; }
-    #wixbu-earnings-report .wer-tabs .wer-tab:not(:last-of-type) {
-      border-right: none; }
-    #wixbu-earnings-report .wer-tabs .wer-tab:last-of-type {
-      border-top-right-radius: 7px; }
-    #wixbu-earnings-report .wer-tabs .wer-tab:first-of-type {
-      border-top-left-radius: 7px; }
-#wixbu-earnings-report .wer-tab-content {
-  border-top-right-radius: 0;
-  clear: both; }
 #wixbu-earnings-report .wer-numbers {
   display: flex;
   width: 100%; }

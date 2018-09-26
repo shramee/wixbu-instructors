@@ -47,33 +47,6 @@ div.wixbu-dash-content-wrap {
 		color: inherit;
 	}
 
-	.wer-tabs {
-		float: right;
-		display: flex;
-		margin-bottom: -2px;
-		.wer-tab {
-			display: block;
-			border-radius: 0;
-			&.wer-active {
-				border-bottom-color: #fff;
-			}
-			&:not(:last-of-type) {
-				border-right: none;
-			}
-			&:last-of-type {
-				border-top-right-radius: 7px;
-			}
-			&:first-of-type {
-				border-top-left-radius: 7px;
-			}
-		}
-	}
-
-	.wer-tab-content {
-		border-top-right-radius: 0;
-		clear: both;
-	}
-
 	.wer-numbers {
 		display: flex;
 		width: 100%;
