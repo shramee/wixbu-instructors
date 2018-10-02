@@ -14,7 +14,7 @@ foreach ( $data as $i => $d ) {
 	$data[ $i ]['sum'] = array_sum( $d['numbers'] );
 }
 
-$chart['max'] = ceil( $chart['max'] / 100 ) * 100;
+$chart['max'] = max( 100, ceil( $chart['max'] / 100 ) * 100 );
 ?>
 
 <div class="prc-wrap">

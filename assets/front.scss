@@ -10,9 +10,14 @@ div.wixbu-dash-content-wrap {
 }
 
 #wixbu-earnings-report {
+	overflow: auto;
+
+	.wer-tab-content {
+		min-width: 800px;
+	}
+
 	.lifterlms-price {
 		font-family: sans-serif;
-		text-align: right;
 	}
 
 	.futura,

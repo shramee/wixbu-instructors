@@ -7,60 +7,63 @@
 div.wixbu-dash-content-wrap {
   flex: 1; }
 
-#wixbu-earnings-report .lifterlms-price {
-  font-family: sans-serif;
-  text-align: right; }
-#wixbu-earnings-report .futura,
-#wixbu-earnings-report .info-text,
-#wixbu-earnings-report .futura-li,
-#wixbu-earnings-report a.wer-tab {
-  text-transform: uppercase;
-  color: #777;
-  font: 400 14px/20px futura, sans-serif; }
-#wixbu-earnings-report .futura-li {
-  color: #aaa; }
-#wixbu-earnings-report .info-text {
-  color: inherit; }
-#wixbu-earnings-report *::-webkit-scrollbar {
-  border-radius: 7px;
-  border: none;
-  box-shadow: inset 0 0 0 6px #fff;
-  background: #999; }
-#wixbu-earnings-report *::-webkit-scrollbar-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 10px;
-  -webkit-box-shadow: none;
-  border: 2px solid #bbb;
-  background-color: #fff; }
-#wixbu-earnings-report .last-row-last-cols-overline tr:last-of-type td:last-of-type:before,
-#wixbu-earnings-report .last-row-last-cols-overline tr:last-of-type td:nth-last-of-type(2):before {
-  content: '';
-  display: block;
-  width: 70px;
-  margin-left: 14px;
-  border-top: 2px solid #ccc;
-  margin-bottom: .7em; }
-#wixbu-earnings-report .wer-accurate-info .fa-asterisk {
-  font-size: 12px;
-  vertical-align: super; }
-#wixbu-earnings-report .wer-time-range {
-  margin-top: 1.6em; }
-  #wixbu-earnings-report .wer-time-range input {
-    width: calc( 49% - 22px ); }
-  #wixbu-earnings-report .wer-time-range a, #wixbu-earnings-report .wer-time-range input {
-    display: inline-block;
-    margin-top: .7em;
-    margin-left: 9px; }
-  #wixbu-earnings-report .wer-time-range form {
-    width: 43%;
-    min-width: 320px;
-    margin: 0 0 0 9px; }
-  #wixbu-earnings-report .wer-time-range *:first-child {
-    margin-left: 0; }
-  #wixbu-earnings-report .wer-time-range a {
-    padding: .5em 0; }
-    #wixbu-earnings-report .wer-time-range a:hover {
-      color: #777; }
+#wixbu-earnings-report {
+  overflow: auto; }
+  #wixbu-earnings-report .wer-tab-content {
+    min-width: 800px; }
+  #wixbu-earnings-report .lifterlms-price {
+    font-family: sans-serif; }
+  #wixbu-earnings-report .futura,
+  #wixbu-earnings-report .info-text,
+  #wixbu-earnings-report .futura-li,
+  #wixbu-earnings-report a.wer-tab {
+    text-transform: uppercase;
+    color: #777;
+    font: 400 14px/20px futura, sans-serif; }
+  #wixbu-earnings-report .futura-li {
+    color: #aaa; }
+  #wixbu-earnings-report .info-text {
+    color: inherit; }
+  #wixbu-earnings-report *::-webkit-scrollbar {
+    border-radius: 7px;
+    border: none;
+    box-shadow: inset 0 0 0 6px #fff;
+    background: #999; }
+  #wixbu-earnings-report *::-webkit-scrollbar-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 10px;
+    -webkit-box-shadow: none;
+    border: 2px solid #bbb;
+    background-color: #fff; }
+  #wixbu-earnings-report .last-row-last-cols-overline tr:last-of-type td:last-of-type:before,
+  #wixbu-earnings-report .last-row-last-cols-overline tr:last-of-type td:nth-last-of-type(2):before {
+    content: '';
+    display: block;
+    width: 70px;
+    margin-left: 14px;
+    border-top: 2px solid #ccc;
+    margin-bottom: .7em; }
+  #wixbu-earnings-report .wer-accurate-info .fa-asterisk {
+    font-size: 12px;
+    vertical-align: super; }
+  #wixbu-earnings-report .wer-time-range {
+    margin-top: 1.6em; }
+    #wixbu-earnings-report .wer-time-range input {
+      width: calc( 49% - 22px ); }
+    #wixbu-earnings-report .wer-time-range a, #wixbu-earnings-report .wer-time-range input {
+      display: inline-block;
+      margin-top: .7em;
+      margin-left: 9px; }
+    #wixbu-earnings-report .wer-time-range form {
+      width: 43%;
+      min-width: 320px;
+      margin: 0 0 0 9px; }
+    #wixbu-earnings-report .wer-time-range *:first-child {
+      margin-left: 0; }
+    #wixbu-earnings-report .wer-time-range a {
+      padding: .5em 0; }
+      #wixbu-earnings-report .wer-time-range a:hover {
+        color: #777; }
 
 /*# sourceMappingURL=front.css.map */
