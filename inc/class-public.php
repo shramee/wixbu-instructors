@@ -44,28 +44,11 @@ class Wixbu_Instructors_Public{
 	}
 
 	public static function second_level_tabs( $tabs, $echo = true ) {
-		$out = '<nav class="wixbu-dashboard-l2-tabs">';
-		foreach ( $tabs as $url => $tab ) {
-			$class = 'wixbu-dashboard-l2-tab';
-			if ( 0 === strpos( $url, '?' ) ) {
-				$qry = explode( '=', trim( $url, '?' ) );
-				if ( ! empty( $_GET[ $qry[0] ] ) && $_GET[ $qry[0] ] == $qry[1] ) {
-					$class .= ' wixbu-dashboard-l2-tab-active';
-				}
-			} else if ( ! empty( LLMS_Student_Dashboard::$tabs[ $url ]['endpoint'] ) ) {
-				$endpoint = LLMS_Student_Dashboard::$tabs[ $url ]['endpoint'];
-				$url = LLMS_Student_Dashboard::$ac_page_url . $endpoint;
-				if ( strpos( $_SERVER['REQUEST_URI'], $endpoint ) ) {
-					$class .= ' wixbu-dashboard-l2-tab-active';
-				}
-			}
-			$out .= "<a class='$class' href='$url'>$tab</a>";
-		}
-		$out .= '</nav><div class="clear"></div>';
-		if ( $echo ) {
-			echo $out;
-		}
-		return $out;
+		return Wixbu_Dash_Public::second_level_tabs( $tabs, $echo );
+	}
+
+	public static function output_chart( $data ) {
+		require 'tpl/payment-chart.php';
 	}
 
 	/**
@@ -77,6 +60,7 @@ class Wixbu_Instructors_Public{
 		$url = $this->url;
 
 		wp_register_style( $token . '-css', $url . '/assets/front.css' );
+		wp_enqueue_style( $token . '-chart', $url . '/assets/chart.css' );
 		wp_register_script( $token . '-js', $url . '/assets/front.js', array( 'jquery' ) );
 	}
 
@@ -94,34 +78,8 @@ class Wixbu_Instructors_Public{
 
 		$tabs = [];
 
-//		llms_get_endpoint_url( $endpoint, '', llms_get_page_url( 'myaccount' ) );
-
-		$tabs['edit-address'] = [
-			'content' => function() {
-				$ac_url = untrailingslashit( llms_get_page_url( 'myaccount' ) );
-				Wixbu_Instructors_Public::second_level_tabs( [
-					'edit-account' => __( 'Credentials', 'lifterlms' ),
-					'edit-address' => __( 'Edit Address', 'lifterlms' ),
-				] );
-				echo '<div class="llms-personal-form edit-address">';
-				LLMS_Student_Dashboard::output_edit_account_content();
-				echo '</div>';
-			},
-			'endpoint' => 'edit-address',
-			'title' => __( 'Edit account', 'lifterlms' ),
-		];
-
+		$tabs['edit-address'] = $tbs['edit-address'];
 		$tabs['edit-account'] = $tbs['edit-account'];
-
-		$tabs['edit-account']['content'] = function() {
-			Wixbu_Instructors_Public::second_level_tabs( [
-				'edit-account' => __( 'Credentials', 'lifterlms' ),
-				'edit-address' => __( 'Edit Address', 'lifterlms' ),
-			] );
-			echo '<div class="llms-personal-form edit-credentials">';
-			LLMS_Student_Dashboard::output_edit_account_content();
-			echo '</div>';
-		};
 
 		$tabs['settings'] = [
 			'content' => [ $this, 'payment_gateway' ],
@@ -138,11 +96,8 @@ class Wixbu_Instructors_Public{
 		$tabs['payouts-history'] = [
 			'content' => [ $this, 'payouts_history' ],
 			'endpoint' => 'payouts-history',
-			'title' => $this->_en_es( __( 'Earnings report', WXBIN ), 'Informe de ganancias' ),
+			'title' => __( 'Payouts history', WXBIN ),
 		];
-
-		LLMS_Student_Dashboard::$ac_page_url = trailingslashit( llms_get_page_url( 'myaccount' ) );
-		LLMS_Student_Dashboard::$tabs = $tabs;
 
 		return $tabs;
 	}

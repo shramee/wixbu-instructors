@@ -36,7 +36,7 @@ foreach ( $income_data as $datum ) {
 	$numbers_data['Your share']['value'][] = $datum[1] * INSTRUCTOR_SHARE / 100;
 }
 
-include 'earning-report-render-numbers.php';
+include 'earning-report-render-chart.php';
 ?>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 

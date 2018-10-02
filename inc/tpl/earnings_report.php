@@ -12,20 +12,7 @@ if ( ! isset( $tabs[ $tabnow ] ) ) {
 	$tabnow = 'week';
 	$_GET['tab'] = $tabnow;
 }
-
-$wixbu_earnings_report_show_time_range = true;
-$wixbu_from = filter_input( INPUT_GET, 'from' );
-$wixbu_to = filter_input( INPUT_GET, 'to' );
-
-if ( ! $wixbu_from ) {
-	$wixbu_from = date( 'Y-m-d', strtotime( 'first day of this month' ) );
-}
-if ( ! $wixbu_to ) {
-	$wixbu_to = date( 'Y-m-d' );
-}
-if ( 0 < version_compare( $wixbu_from, $wixbu_to ) ) {
-	$wixbu_to = $wixbu_from;
-}
+$wixbu_to = date( 'Y-m-d' );
 
 Wixbu_Instructors_Public::second_level_tabs( [
 	'?tab=year'  => __( 'This year', 'wixbu' ),
@@ -41,54 +28,4 @@ Wixbu_Instructors_Public::second_level_tabs( [
 		include "earning_report-$tabnow.php";
 		?>
 	</div>
-
-	<?php
-	if ( $wixbu_earnings_report_show_time_range ) {
-		?>
-		<div class="wer-time-range">
-			<a class="futura-li" href="<?php echo add_query_arg( [
-				'from' => date( 'Y-m' ) . '-01',
-				'to' => date( 'Y-m-d' ),
-			] ); ?>">
-				<?php $this->e_en_es( __( 'This Month', WXBIN ), 'Este mes' ); ?> </a>
-
-			<a class="futura-li" href="<?php echo add_query_arg( [
-				'to' => date( 'Y-m-d', strtotime( 'last day of previous month' ) ),
-				'from' => date( 'Y-m-d', strtotime( 'first day of previous month' ) ),
-			] ); ?>">
-				<?php $this->e_en_es( __( 'Last Month', WXBIN ), 'El mes pasado' ); ?></a>
-
-			<a class="futura-li" href="<?php echo add_query_arg( [
-				'from' => date( 'Y' ) . '-01-01',
-				'to' => date( 'Y-m-d' ),
-			] ); ?>">
-				<?php $this->e_en_es( __( 'Last year', WXBIN ), 'El año pasado' ); ?></a>
-
-			<form class="alignright" id="wixbu-reports-term">
-				<input type="date" value="<?php echo $wixbu_from ?>" name="from">
-				<a class="futura-li">To</a>
-				<input type="date" value="<?php echo $wixbu_to ?>" name="to">
-				<input type="hidden" name="tab" value="<?php echo $tabnow ?>">
-			</form>
-			<script>
-				(
-					function ( $ ) {
-						var
-							$form = $( '#wixbu-reports-term' ),
-							timeout = 0;
-						$form.find( 'input[type="date"]' ).change( function() {
-							if ( timeout ) {
-								clearTimeout( timeout );
-							}
-							timeout = setTimeout( function () {
-								$form.submit();
-							}, 1600 );
-						} );
-					}
-				)( jQuery );
-			</script>
-		</div>
-		<?php
-	}
-	?>
 </div>

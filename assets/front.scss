@@ -4,30 +4,15 @@
  * @package Wixbu_Instructors
  * @version 1.0.0
  */
-nav.llms-sd-nav.llms-sd-nav {
-	width: 230px;
-}
 
 div.wixbu-dash-content-wrap {
-	width: calc( 100% - 250px );
+	flex: 1;
 }
 
 #wixbu-earnings-report {
 	.lifterlms-price {
 		font-family: sans-serif;
-		width: 79px;
-		display: block;
 		text-align: right;
-	}
-
-	.wer-table-wrap,
-	.wer-tab-content,
-	a.wer-tab,
-	.wer-box {
-		border-radius: 7px;
-		border: 2px solid #777;
-		color: #777;
-		padding: 0.7em;
 	}
 
 	.futura,
@@ -45,81 +30,6 @@ div.wixbu-dash-content-wrap {
 
 	.info-text {
 		color: inherit;
-	}
-
-	.wer-numbers {
-		display: flex;
-		width: 100%;
-		&:after {
-			content: '';
-			display: block;
-			clear: both;
-		}
-		.tile {
-			text-align: center;
-			padding: calc( .7em + 1% );
-			> * {
-				line-height: 1.6;
-				padding: 0.7em 0 ;
-			}
-			> .futura-li {
-				border-bottom: 2px solid #ddd;
-				.info {
-					position: relative;
-					vertical-align: super;
-					display: inline-block;
-					font: 12px sans-serif;
-					border: 2px solid;
-					border-radius: 99px;
-					width: 20px;
-					height: 20px;
-					line-height: 16px;
-					.info-text {
-						position: absolute;
-						bottom: -2px;
-						left: -2px;
-						width: 200px;
-						background: #fff;
-						border-radius: 7px;
-						display: none;
-						z-index: 1;
-						text-transform: none;
-					}
-					&:hover .info-text {
-						display: block;
-					}
-				}
-			}
-		}
-	}
-
-	.wer-table-wrap {
-		margin: calc( .7em + 1% );
-		padding: calc( .7em + 1% );
-		max-height: 340px;
-		overflow: auto;
-		border-color: #ccc;
-		table {
-			margin: 0;
-			p {
-				margin: 0;
-			}
-			.tac {
-				text-align: center;
-			}
-			.date {
-				min-width: 70px;
-			}
-			&, th, td {
-				border: none;
-			}
-			th {
-				font: 14px futura, sans-serif;
-				text-transform: uppercase;
-				padding: 1.6em 8px;
-				color: #aaa;
-			}
-		}
 	}
 
 	*::-webkit-scrollbar {
@@ -180,3 +90,5 @@ div.wixbu-dash-content-wrap {
 		}
 	}
 }
+
+//@import "chart";
