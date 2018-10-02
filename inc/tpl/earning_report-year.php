@@ -1,5 +1,5 @@
 <?php
-$wixbu_from = date( 'Y-m-d', strtotime( '7 days ago' ) );
+$wixbu_from = date( 'Y-m-d', strtotime( '1 year ago' ) );
 
 $from = str_replace( '-', '', $wixbu_from );
 $to = str_replace( '-', '', $wixbu_to );
@@ -11,23 +11,23 @@ $income_data = Wixbu_Instructors::query_umeta_table(
 
 $data = [
 	[
-		'start'   => strtotime( '6 days ago' ),
-		'end'     => strtotime( '5 days ago' ),
+		'start' => strtotime( '9 months ago' ),
+		'end' => strtotime( '12 months ago' ),
 		'numbers' => [ 0, 0, 0 ],
 	],
 	[
-		'start'   => strtotime( '4 days ago' ),
-		'end'     => strtotime( '3 days ago' ),
+		'start' => strtotime( '6 months ago' ),
+		'end' => strtotime( '9 months ago' ),
 		'numbers' => [ 0, 0, 0 ],
 	],
 	[
-		'start'   => strtotime( '2 days ago' ),
-		'end'     => strtotime( '1 days ago' ),
+		'start' => strtotime( '3 months ago' ),
+		'end' => strtotime( '6 months ago' ),
 		'numbers' => [ 0, 0, 0 ],
 	],
 	[
-		'start'   => time(),
-		'end'     => strtotime( 'today' ),
+		'start' => time(),
+		'end' => strtotime( '3 months ago' ),
 		'numbers' => [ 0, 0, 0 ],
 	],
 ];
@@ -35,13 +35,11 @@ $data = [
 foreach ( $data as $k => $d ) {
 	$s = $d['start'];
 	$e = $d['end'];
-	$data[$k]['label'] = date( 'D', $s ) . ' - ' . date( 'D', $e );
+	$data[$k]['label'] = date( 'M', $s ) . ' - ' . date( 'M', $e );
 	$data[$k]['start'] = date( 'Ymd', $s );
 	$data[$k]['end'] = date( 'Ymd', $e );
 	$data[ $k ]['label'] = strtoupper( $data[ $k ]['label'] );
 }
-
-$data[ 3 ]['label'] = strtoupper( date( 'D' ) );
 
 foreach ( $income_data as $inc_d ) {
 	$k = explode( '::', $inc_d->key )[0];

@@ -89,6 +89,7 @@
 
 .prcs-lb {
 	font: 17px futura;
+	letter-spacing: -1px;
 	text-align: center;
 	margin: 1em 0 1.6em;
 }

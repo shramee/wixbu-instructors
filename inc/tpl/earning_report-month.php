@@ -11,23 +11,23 @@ $income_data = Wixbu_Instructors::query_umeta_table(
 
 $data = [
 	[
+		'start'   => strtotime( '27 days ago' ),
+		'end'     => strtotime( '21 days ago' ),
+		'numbers' => [ 0, 0, 0 ],
+	],
+	[
+		'start'   => strtotime( '20 days ago' ),
+		'end'     => strtotime( '14 days ago' ),
+		'numbers' => [ 0, 0, 0 ],
+	],
+	[
+		'start'   => strtotime( '13 days ago' ),
+		'end'     => strtotime( '7 days ago' ),
+		'numbers' => [ 0, 0, 0 ],
+	],
+	[
 		'start'   => strtotime( '6 days ago' ),
-		'end'     => strtotime( '5 days ago' ),
-		'numbers' => [ 0, 0, 0 ],
-	],
-	[
-		'start'   => strtotime( '4 days ago' ),
-		'end'     => strtotime( '3 days ago' ),
-		'numbers' => [ 0, 0, 0 ],
-	],
-	[
-		'start'   => strtotime( '2 days ago' ),
-		'end'     => strtotime( '1 days ago' ),
-		'numbers' => [ 0, 0, 0 ],
-	],
-	[
-		'start'   => time(),
-		'end'     => strtotime( 'today' ),
+		'end'     => time(),
 		'numbers' => [ 0, 0, 0 ],
 	],
 ];
@@ -35,13 +35,11 @@ $data = [
 foreach ( $data as $k => $d ) {
 	$s = $d['start'];
 	$e = $d['end'];
-	$data[$k]['label'] = date( 'D', $s ) . ' - ' . date( 'D', $e );
+	$data[$k]['label'] = date( 'j M', $s ) . ' - ' . date( 'j M', $e );
 	$data[$k]['start'] = date( 'Ymd', $s );
 	$data[$k]['end'] = date( 'Ymd', $e );
-	$data[ $k ]['label'] = strtoupper( $data[ $k ]['label'] );
+//	$data[ $k ]['label'] = strtoupper( $data[ $k ]['label'] );
 }
-
-$data[ 3 ]['label'] = strtoupper( date( 'D' ) );
 
 foreach ( $income_data as $inc_d ) {
 	$k = explode( '::', $inc_d->key )[0];
