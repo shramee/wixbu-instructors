@@ -57,8 +57,43 @@ class Wixbu_Instructors {
 		self::$path    = plugin_dir_path( $file );
 		self::$version = '1.0.0';
 
+		register_activation_hook( __FILE__, [ $this, 'create_tables' ] );
 		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
 
+	}
+
+	public function create_tables() {
+		global $wpdb;
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+		dbDelta( "
+			CREATE TABLE {$wpdb->prefix}wixbu_transactions (
+				t_id BIGINT(20) NOT NULL AUTO_INCREMENT,
+				t_user BIGINT(20),
+				t_type VARCHAR(255) NOT NULL,
+				t_amount DOUBLE,
+				t_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				PRIMARY KEY (t_id),
+				KEY t_user (t_user),
+				KEY t_type (t_type),
+				KEY t_date (t_date)
+			) $charset_collate;
+			" );
+
+		dbDelta( "
+			CREATE TABLE {$wpdb->prefix}wixbu_balance (
+				b_id BIGINT(20) NOT NULL AUTO_INCREMENT,
+				b_user BIGINT(20),
+				b_type VARCHAR(255) NOT NULL,
+				b_amount DOUBLE,
+				PRIMARY KEY (b_id),
+				KEY b_user (b_user),
+				KEY b_type (b_type)
+  		) $charset_collate;
+			" );
 	}
 
 	/**
@@ -134,6 +169,7 @@ class Wixbu_Instructors {
 		if ( class_exists( 'Wixbu_Dash' ) ) {
 			$this->_admin(); //Initiate admin
 			$this->_public(); //Initiate public
+
 		} else {
 			add_action( 'admin_notices', [ $this, 'wixbu_dash_required_notice' ] );
 		}
