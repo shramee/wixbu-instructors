@@ -78,6 +78,10 @@ class Wixbu_Instructors_Public{
 
 		$tabs = [];
 
+		if ( is_admin() ) {
+			$tabs = $tbs; // Fix for student dahboard permalinks
+		}
+
 		$tabs['edit-address'] = $tbs['edit-address'];
 		$tabs['edit-account'] = $tbs['edit-account'];
 

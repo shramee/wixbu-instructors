@@ -1,0 +1,30 @@
+
+.no-border {
+	&, th, td {
+		border: none;
+	}
+}
+
+.table-wrap {
+	overflow: auto;
+	clear: both;
+}
+
+span.wixbu-font {
+	font-family: "BenchNine", sans-serif;
+}
+
+span.label, span.label-yellow {
+	display: inline-block;
+	padding: 3px 7px;
+	background: #aaa;
+	color: #fff;
+	border-radius: 3px;
+	font-weight: 500;
+}
+
+.llms-student-dashboard a.back {
+	color: inherit;
+	margin-bottom: .7em;
+	display: inline-block;
+}

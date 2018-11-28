@@ -15,8 +15,9 @@ require 'inc/class-admin.php';
 require 'inc/class-public.php';
 
 define( 'WXBIN', 'wixbu-instructors' );
-define( 'WIXBU_COMMISSION', 40 );
-define( 'INSTRUCTOR_SHARE', 100 - WIXBU_COMMISSION );
+define( 'INSTRUCTOR_SHARE', 77 );
+define( 'WIXBU_COMMISSION', 100 - INSTRUCTOR_SHARE );
+define( 'WIXBU_PAYOUT_DATE', 25 );
 
 /**
  * Wixbu instructors main class
@@ -43,18 +44,15 @@ class Wixbu_Instructors {
 
 	/**
 	 * Constructor function.
-	 *
-	 * @param string $file __FILE__ of the main plugin
-	 *
 	 * @access  private
 	 * @since   1.0.0
 	 */
-	private function __construct( $file ) {
+	private function __construct() {
 
 		self::$token   = WXBIN;
-		self::$file    = $file;
-		self::$url     = plugin_dir_url( $file );
-		self::$path    = plugin_dir_path( $file );
+		self::$file    = __FILE__;
+		self::$url     = plugin_dir_url( __FILE__ );
+		self::$path    = plugin_dir_path( __FILE__ );
 		self::$version = '1.0.0';
 
 		register_activation_hook( __FILE__, [ $this, 'create_tables' ] );
@@ -62,38 +60,121 @@ class Wixbu_Instructors {
 
 	}
 
+	public function next_payout_date() {
+		$date = date( 'Y-m' );
+		$date = explode( '-', $date );
+		if ( $date[1] < 12 ) {
+			$date[1]++;
+		} else {
+			$date[0]++;
+		}
+
+		$date = "$date[0]-$date[1]-" . WIXBU_PAYOUT_DATE;
+
+		return strtotime( $date );
+	}
+
 	public function create_tables() {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
 
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		dbDelta( "
-			CREATE TABLE {$wpdb->prefix}wixbu_transactions (
-				t_id BIGINT(20) NOT NULL AUTO_INCREMENT,
-				t_user BIGINT(20),
-				t_type VARCHAR(255) NOT NULL,
-				t_amount DOUBLE,
-				t_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				PRIMARY KEY (t_id),
-				KEY t_user (t_user),
-				KEY t_type (t_type),
-				KEY t_date (t_date)
+			CREATE TABLE {$wpdb->prefix}wixbu_payouts (
+				id BIGINT(20) NOT NULL AUTO_INCREMENT,
+				status VARCHAR(255),
+				user_id BIGINT(20),
+				amount DOUBLE,
+				created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+				orders LONGTEXT,
+
+				gross_amount DOUBLE,
+				total_payment DOUBLE,
+
+				PRIMARY KEY (id),
+				KEY user_id(user_id),
+				KEY created (created)
 			) $charset_collate;
 			" );
+	}
 
-		dbDelta( "
-			CREATE TABLE {$wpdb->prefix}wixbu_balance (
-				b_id BIGINT(20) NOT NULL AUTO_INCREMENT,
-				b_user BIGINT(20),
-				b_type VARCHAR(255) NOT NULL,
-				b_amount DOUBLE,
-				PRIMARY KEY (b_id),
-				KEY b_user (b_user),
-				KEY b_type (b_type)
-  		) $charset_collate;
-			" );
+	/**
+	 * @param int $id
+	 * @return object
+	 */
+	public function get_payout( $id ) {
+//		return $this->query_payouts( [ 'id' => $id ] );
+		return $this->mock_payout();
+	}
+
+	/**
+	 * @param int $id
+	 * @return array
+	 */
+	public function get_payouts() {
+//		return $this->query_payouts( [ 'id' => $id ] );
+		// Mockup payouts
+		return[
+			$this->mock_payout(),
+			$this->mock_payout(),
+			$this->mock_payout(),
+			$this->mock_payout(),
+		];
+	}
+
+	/**
+	 * @return object
+	 */
+	public function mock_payout(  ) {
+		if ( isset( $this->mock_month ) ) {
+			$this->mock_month ++;
+		} else {
+			$this->mock_month = 1;
+		}
+
+		$gross = rand( 500, 1600 );
+		$data = [
+			'id' => 259,
+			'status' => 'sent',
+			'user_id' => get_current_user_id(),
+			'amount' => $gross * INSTRUCTOR_SHARE / 100,
+			'created' => strtotime( "- $this->mock_month months" ),
+			'orders' => '3209,3202,3200,3198,3196',
+			'gross_amount' => $gross,
+			'total_payment' => $gross * 1.18,
+			'platform_fees' => $gross * WIXBU_COMMISSION / 100,
+		];
+
+		return (object) $data;
+	}
+
+	public function query_user_payouts( $args = [] ) {
+		$args['user'] = get_current_user_id();
+
+		return $this->query_payouts( $args );
+	}
+
+	public function query_payouts( $args = [] ) {
+		global $wpdb;
+
+		$columns = [ 'id', 'user', 'amount', 'date', 'meta', ];
+
+		$where = [];
+
+		foreach ( $where as $k => $v ) {
+			if ( in_array( $k, $columns ) ) {
+				$where[] = "{$k} LIKE '{$v}'";
+			}
+		}
+
+		if ( $where ) {
+			$where = ' WHERE ' . implode( ' AND ', $where );
+		}
+
+		return $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}wixbu_payouts{$where} LIMIT 0, 12;" );
 	}
 
 	/**
@@ -157,12 +238,20 @@ class Wixbu_Instructors {
 	 * Return class instance
 	 * @return Wixbu_Instructors instance
 	 */
-	public static function instance( $file ) {
+	public static function instance() {
 		if ( null == self::$_instance ) {
-			self::$_instance = new self( $file );
+			self::$_instance = new self();
 		}
 
 		return self::$_instance;
+	}
+
+	/**
+	 * @param int|string $sent Timestamp
+	 */
+	public static function aprox_arrival_from_date_sent( $sent ) {
+		$sent = strtotime( $sent );
+		return date( 'M d, Y', strtotime( '+ 7 weekdays', $sent ) );
 	}
 
 	public function plugins_loaded() {
@@ -209,4 +298,4 @@ class Wixbu_Instructors {
 }
 
 /** Intantiating main plugin class */
-Wixbu_Instructors::instance( __FILE__ );
+Wixbu_Instructors::instance();
