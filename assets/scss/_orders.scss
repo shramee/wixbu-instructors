@@ -1,0 +1,64 @@
+.wixbu-orders-table {
+	&, td, th {
+		border: none;
+	}
+	th, td {
+		padding: 1.1em .5em;
+		border-bottom: 1px solid #ddd;
+	}
+	th {
+		font-weight: 500;
+	}
+	td {
+		&:first-child {
+			border-left: 1px solid #ddd;
+		}
+		&:last-child {
+			border-right: 1px solid #ddd;
+		}
+	}
+}
+
+.wixbu-popup-overlay,
+.wixbu-popup {
+	width: 400px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 999;
+	background: #f9f9f9;
+	padding: 1.6em;
+	table {
+		width: 100%;
+		background: #fff;
+		border-right: 1px solid #ddd;
+		td {
+			border-right: none;
+			padding: 1em .25em;
+			text-align: center;
+		}
+	}
+}
+.wixbu-popup-overlay {
+	height: 100vh;
+	width: 100vw;
+	background: rgba(0,0,0,0.7);
+}
+
+.sum-box {
+	float: right;
+	width: auto;
+	min-width: 250px;
+	border: 1px solid #ddd;
+	background: #fff;
+	td {
+		padding: .7em 1.1em;
+	}
+	tr:first-child td {
+		padding-top: 1.6em;
+	}
+	tr:last-child td {
+		padding-bottom: 1.6em;
+	}
+}

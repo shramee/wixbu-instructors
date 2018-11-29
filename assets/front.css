@@ -124,18 +124,55 @@ div.wixbu-dash-content-wrap {
 .payouts-history .wixbu-address img {
   width: 140px;
   margin-bottom: .7em; }
-
-#payout-orders {
+.payouts-history .wixbu-orders-table {
   margin-top: 5em; }
-  #payout-orders th, #payout-orders td {
-    padding: 1.1em .5em;
-    border-bottom: 1px solid #ddd; }
-  #payout-orders th {
-    font-weight: 500; }
-  #payout-orders td:first-child {
-    border-left: 1px solid #ddd; }
-  #payout-orders td:last-child {
-    border-right: 1px solid #ddd; }
+
+.payout-date {
+  margin-top: 196px; }
+
+.transactions .order-filters input, .transactions .order-filters select {
+  width: auto;
+  display: inline;
+  margin-right: 5px;
+  padding: 0 7px;
+  line-height: 30px;
+  height: 32px;
+  color: #333;
+  -webkit-appearance: none;
+  border: 1px solid;
+  border-radius: 3px;
+  background: #fff; }
+.transactions form.order-filters {
+  float: left;
+  margin: 0; }
+  .transactions form.order-filters td {
+    padding: 0; }
+  .transactions form.order-filters .small {
+    font-size: .7em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888; }
+.transactions .sum-box {
+  min-width: 0; }
+.transactions a.button, .transactions input[type="submit"], .transactions button {
+  background: #009de4;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  border-color: #007fbb;
+  padding: 0 16px; }
+
+.wixbu-orders-table, .wixbu-orders-table td, .wixbu-orders-table th {
+  border: none; }
+.wixbu-orders-table th, .wixbu-orders-table td {
+  padding: 1.1em .5em;
+  border-bottom: 1px solid #ddd; }
+.wixbu-orders-table th {
+  font-weight: 500; }
+.wixbu-orders-table td:first-child {
+  border-left: 1px solid #ddd; }
+.wixbu-orders-table td:last-child {
+  border-right: 1px solid #ddd; }
 
 .wixbu-popup-overlay,
 .wixbu-popup {
@@ -175,8 +212,5 @@ div.wixbu-dash-content-wrap {
     padding-top: 1.6em; }
   .sum-box tr:last-child td {
     padding-bottom: 1.6em; }
-
-.payout-date {
-  margin-top: 196px; }
 
 /*# sourceMappingURL=front.css.map */

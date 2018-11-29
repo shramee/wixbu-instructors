@@ -103,6 +103,12 @@ class Wixbu_Instructors_Public{
 			'title' => __( 'Payouts history', WXBIN ),
 		];
 
+		$tabs['transactions'] = [
+			'content' => [ $this, 'transactions' ],
+			'endpoint' => 'transactions',
+			'title' => __( 'Transactions', WXBIN ),
+		];
+
 		return $tabs;
 	}
 
@@ -116,6 +122,10 @@ class Wixbu_Instructors_Public{
 
 	public function payouts_history() {
 		require 'tpl/payouts_history.php';
+	}
+
+	public function transactions() {
+		require 'tpl/transactions.php';
 	}
 
 	protected function e_en_es( $en, $es ) {

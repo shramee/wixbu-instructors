@@ -1,0 +1,41 @@
+.transactions {
+	.order-filters {
+		input, select {
+			width: auto;
+			display: inline;
+			margin-right: 5px;
+			padding: 0 7px;
+			line-height: 30px;
+			height: 32px;
+			color: #333;
+			-webkit-appearance: none;
+			border: 1px solid;
+			border-radius: 3px;
+			background: #fff;
+		}
+	}
+	form.order-filters {
+		float: left;
+		margin: 0;
+		td {
+			padding: 0;
+		}
+		.small {
+			font-size: .7em;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: #888;
+		}
+	}
+	.sum-box {
+		min-width: 0;
+	}
+	a.button, input[type="submit"], button {
+		background: #009de4;
+		font: inherit;
+		font-weight: 700;
+		color: #fff;
+		border-color: #007fbb;
+		padding: 0 16px;
+	}
+}
