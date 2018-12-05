@@ -9,6 +9,8 @@ Author URI: http://shramee.me/
 @developer shramee <shramee.srivastav@gmail.com>
 */
 
+/** Wixbu payout class */
+require 'inc/class-payout.php';
 /** Plugin admin class */
 require 'inc/class-admin.php';
 /** Plugin public class */
@@ -34,8 +36,10 @@ class Wixbu_Instructors {
 	public static $url;
 	/** @var string Plugin directory path */
 	public static $path;
+
 	/** @var Wixbu_Instructors Instance */
 	private static $_instance = null;
+
 	/** @var Wixbu_Instructors_Admin Instance */
 	public $admin;
 
@@ -102,27 +106,51 @@ class Wixbu_Instructors {
 	}
 
 	/**
+	 * Payout by ID
 	 * @param int $id
-	 * @return object
+	 * @return Wixbu_Payout|null
 	 */
 	public function get_payout( $id ) {
-//		return $this->query_payouts( [ 'id' => $id ] );
-		return $this->mock_payout();
+
+		if ( $id === 'upcoming' ) {
+			$payout = [
+				[
+					'id'            => 'upcoming',
+					'status'        => 'pending',
+					'user_id'       => get_current_user_id(),
+					'amount'        => 0,
+					'created'       => Wixbu_Instructors::instance()->next_payout_date(),
+					'orders'        => '',
+					'gross_amount'  => 0,
+					'total_payment' => 0,
+					'platform_fees' => 0,
+				]
+			];
+		} else {
+			$payout = $this->query_payouts( [ 'id' => $id ] );
+		}
+
+		if ( $payout ) {
+			return new Wixbu_Payout( $payout[0] );
+		}
+		return null;
 	}
 
 	/**
-	 * @param int $id
-	 * @return array
+	 * Get current user's payouts
+	 * @return array|null
 	 */
 	public function get_payouts() {
-//		return $this->query_payouts( [ 'id' => $id ] );
-		// Mockup payouts
-		return[
-			$this->mock_payout(),
-			$this->mock_payout(),
-			$this->mock_payout(),
-			$this->mock_payout(),
-		];
+		$payouts_data = $this->query_payouts( [ 'user' => get_current_user_id() ] );
+		if ( $payouts_data ) {
+			$payouts = [];
+			foreach ( $payouts_data as $payout ) {
+				$payouts[] = new Wixbu_Payout( $payout );
+			}
+			return $payouts;
+		}
+
+		return null;
 	}
 
 	/**
@@ -152,7 +180,7 @@ class Wixbu_Instructors {
 	}
 
 	public function query_user_payouts( $args = [] ) {
-		$args['user'] = get_current_user_id();
+		$args['user_id'] = get_current_user_id();
 
 		return $this->query_payouts( $args );
 	}
@@ -160,21 +188,28 @@ class Wixbu_Instructors {
 	public function query_payouts( $args = [] ) {
 		global $wpdb;
 
-		$columns = [ 'id', 'user', 'amount', 'date', 'meta', ];
+		$args = wp_parse_args( $args, [
+			'limit' => 99,
+			'offset' => 99,
+		] );
+
+		$columns = [ 'id', 'user_id', 'amount', 'date', 'meta', ];
 
 		$where = [];
 
-		foreach ( $where as $k => $v ) {
+		foreach ( $args as $k => $v ) {
 			if ( in_array( $k, $columns ) ) {
-				$where[] = "{$k} LIKE '{$v}'";
+				$where[] = "{$k} = '{$v}'";
 			}
 		}
 
 		if ( $where ) {
 			$where = ' WHERE ' . implode( ' AND ', $where );
+		} else {
+			$where = '';
 		}
 
-		return $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}wixbu_payouts{$where} LIMIT 0, 12;" );
+		return $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}wixbu_payouts {$where} ORDER BY id DESC LIMIT 0, 99;" );
 	}
 
 	/**

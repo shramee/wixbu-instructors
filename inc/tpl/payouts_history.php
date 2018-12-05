@@ -11,7 +11,26 @@ $next_payout_date = Wixbu_Instructors::instance()->next_payout_date();
 ?>
 <div class="wixbu-dash-content-no-padding">
 	<table class="payouts-table no-border">
+		<tr>
+			<td>
+				<h5>Invoice</h5>
+				<?php _e( 'Upcoming', 'wixbu' ) ?>
+				<span class="label"><?php _e( 'pending', 'wixbu' ) ?></span>
+			</td>
+			<td>
+				<h5>Date</h5>
+				<?php echo date( 'M d, Y', $next_payout_date ) ?>
+			</td>
+			<td>
+				<h5>Next Payout</h5>
+				<?php echo date( 'M d, Y', $next_payout_date ) ?>
+			</td>
+			<td>
+				<a class="button" href="?payout=upcoming">View</a>
+			</td>
+		</tr>
 		<?php
+		if ( $payouts )
 		foreach ( $payouts as $payout ) {
 			?>
 			<tr>
@@ -22,7 +41,7 @@ $next_payout_date = Wixbu_Instructors::instance()->next_payout_date();
 				</td>
 				<td>
 					<h5>Date</h5>
-					<?php echo date( 'M d, Y', $payout->created ) ?>
+					<?php echo date( 'M d, Y', strtotime( $payout->created ) ) ?>
 				</td>
 				<td>
 					<h5>Next Payout</h5>

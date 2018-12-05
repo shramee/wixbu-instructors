@@ -1,6 +1,7 @@
 <?php
 
-$payout = Wixbu_Instructors::instance()->get_payout( 259 );
+$payout = Wixbu_Instructors::instance()->get_payout( $_GET['payout'] );
+
 $orders = [];
 $uid    = $payout->user_id;
 $user   = get_user_by( 'id', $uid );
@@ -74,14 +75,7 @@ llms_phone user_email';
 		}
 		echo str_replace( [ "\n\n\n\n", "\n\n\n", "\n\n", "\n" ], '<br>', $format );
 
-		$orders_query = new WP_Query( array(
-			'order'          => 'DESC',
-			'orderby'        => 'date',
-			'post__in'       => explode( ',', $payout->orders ),
-			'posts_per_page' => 999,
-			'post_status'    => 'any',
-			'post_type'      => 'llms_order',
-		) );
+		$orders_query = $payout->orders_query();
 
 		include 'orders-table.php';
 		?>
@@ -114,7 +108,7 @@ llms_phone user_email';
 
 <div class="payout-date">
 	<?php _e( 'Payment processed by Stripe', 'wixbu' ) ?><br>
-	<?php printf( __( 'Date %s', 'wixbu' ), date( 'M d, Y', $payout->created ) ); ?>
+	<?php printf( __( 'Date %s', 'wixbu' ), date( 'M d, Y', strtotime( $payout->created ) ) ); ?>
 </div>
 
 <?php
