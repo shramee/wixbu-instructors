@@ -14,17 +14,16 @@ class Wixbu_Payout {
 
 	public $orders;
 
-	public $gross_amount;
-
-	public $total_payment;
-
-	public $platform_fees;
+	/** @var array $labels */
+	public $labels = [];
 
 	public function __construct( $object ) {
 		$obj_ar = (array) $object;
 		foreach ( $obj_ar as $k => $value ) {
 			$this->$k = $value;
 		}
+
+		$this->setup_labels();
 	}
 
 	public function orders_query_args() {
@@ -37,8 +36,8 @@ class Wixbu_Payout {
 				],
 				'meta_query'     => array(
 					array(
-						'key'     => 'wixbu_paid_out',
-						'compare' => 'NOT EXISTS',
+						'key'     => 'wixbu_payout_pending',
+						'compare' => 'EXISTS',
 					),
 				),
 				'posts_per_page' => 999,
@@ -61,5 +60,20 @@ class Wixbu_Payout {
 		$args = wp_parse_args( $args, $this->orders_query_args() );
 
 		return new WP_Query( $args );
+	}
+
+	private function setup_labels() {
+		$this->labels = [
+			'students_paid' => __( 'TOTAL PAID', 'wixbu' ),
+			'tax'           => __( 'Tax', 'wixbu' ),
+			'net_income'    => __( 'Net Income', 'wixbu' ),
+			'wixbu_fees'    => sprintf( __( 'Wixbu Fees %s%%', 'wixbu' ), WIXBU_COMMISSION ),
+			'your_earning'  => __( 'Total earnings', 'wixbu' ),
+		];
+
+		if ( $this->id === 'upcoming' ) {
+//			$this->labels['your_earning']  = 'Balance';
+		}
+
 	}
 }

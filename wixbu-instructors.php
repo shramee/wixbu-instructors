@@ -65,12 +65,15 @@ class Wixbu_Instructors {
 	}
 
 	public function next_payout_date() {
-		$date = date( 'Y-m' );
+		$date = date( 'Y-m-d' );
 		$date = explode( '-', $date );
-		if ( $date[1] < 12 ) {
-			$date[1]++;
-		} else {
-			$date[0]++;
+		if ( $date[2] > WIXBU_PAYOUT_DATE ) {
+			if ( $date[1] < 12 ) {
+				$date[1] ++;
+			} else {
+				$date[1] = '01';
+				$date[0] ++;
+			}
 		}
 
 		$date = "$date[0]-$date[1]-" . WIXBU_PAYOUT_DATE;
@@ -95,14 +98,30 @@ class Wixbu_Instructors {
 
 				orders LONGTEXT,
 
-				gross_amount DOUBLE,
-				total_payment DOUBLE,
-
 				PRIMARY KEY (id),
 				KEY user_id(user_id),
 				KEY created (created)
 			) $charset_collate;
 			" );
+	}
+
+	/**
+	 * Payout by ID
+	 * @param int $id
+	 * @return Wixbu_Payout|null
+	 */
+	public function insert_payout( $user_id, $paid_amount, $orders, $status = 'paid' ) {
+		/** @var wpdb $wpdb */
+		global $wpdb;
+
+		$data = wp_parse_args( [], [
+			'status' => $status,
+			'user_id' => $user_id,
+			'amount' => $paid_amount,
+			'orders' => implode( ',', $orders ),
+		] );
+
+		return $wpdb->insert( "{$wpdb->prefix}wixbu_payouts", $data );
 	}
 
 	/**
@@ -121,9 +140,6 @@ class Wixbu_Instructors {
 					'amount'        => 0,
 					'created'       => Wixbu_Instructors::instance()->next_payout_date(),
 					'orders'        => '',
-					'gross_amount'  => 0,
-					'total_payment' => 0,
-					'platform_fees' => 0,
 				]
 			];
 		} else {
@@ -171,9 +187,6 @@ class Wixbu_Instructors {
 			'amount' => $gross * INSTRUCTOR_SHARE / 100,
 			'created' => strtotime( "- $this->mock_month months" ),
 			'orders' => '3209,3202,3200,3198,3196',
-			'gross_amount' => $gross,
-			'total_payment' => $gross * 1.18,
-			'platform_fees' => $gross * WIXBU_COMMISSION / 100,
 		];
 
 		return (object) $data;
@@ -320,6 +333,7 @@ class Wixbu_Instructors {
 
 		//Enqueue front end JS and CSS
 		add_action( 'wp_enqueue_scripts', array( $this->public, 'enqueue' ) );
+		add_action( 'wixbu_intructor_paid_out', array( $this->public, 'wixbu_intructor_paid_out', 10, 2 ) );
 		add_filter( 'llms_get_student_dashboard_tabs', array( $this->public, 'llms_get_student_dashboard_tabs' ), 11 );
 
 	}

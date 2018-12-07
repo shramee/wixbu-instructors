@@ -64,6 +64,10 @@ class Wixbu_Instructors_Public{
 		wp_register_script( $token . '-js', $url . '/assets/front.js', array( 'jquery' ) );
 	}
 
+	public function wixbu_intructor_paid_out( $result, $data ) {
+		Wixbu_Instructors::instance()->insert_payout( $data['user_id'], $data['paid'], $data['orders'] );
+	}
+
 	/**
 	 * Filters students' dashboard tabs
 	 * @param array $tbs Default tabs
